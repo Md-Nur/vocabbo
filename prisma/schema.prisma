@@ -1,12 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
+// schema.prisma
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -15,14 +9,19 @@ datasource db {
 }
 
 model User {
-  id          String       @id @default(uuid())
-  name        String
-  email       String       @unique
-  password    String
-  role        Role         @default(user)
-  createdAt   DateTime     @default(now()) @map("created_at")
-  quizzes     Quiz[]
-  leaderboard Leaderboard?
+  id           String       @id @default(uuid())
+  name         String
+  email        String       @unique
+  password     String
+  role         Role         @default(user)
+  interests    String[]     @default(["all"])
+  createdAt    DateTime     @default(now()) @map("created_at")
+  dificulty    Difficulty?  @default(easy)
+  // Relationships
+  addedWords   Word[]       @relation("AddedWords")
+  interactions UserWord[]
+  quizzes      Quiz[]
+  leaderboard  Leaderboard?
 
   @@map("users")
 }
@@ -31,22 +30,45 @@ model Word {
   id               String     @id @default(uuid())
   word             String     @unique
   meaning          String
-  definition       String
   difficulty       Difficulty
   exampleSentences Json       @map("example_sentences")
   imageUrl         String?    @map("image_url")
   videoUrl         String?    @map("video_url")
+  createdAt        DateTime   @default(now()) @map("created_at")
+
+  // Relationships
+  addedById    String     @map("added_by")
+  addedBy      User       @relation("AddedWords", fields: [addedById], references: [id])
+  categories   String[]   @default(["all"])
+  interactions UserWord[]
 
   @@map("words")
+}
+
+model UserWord {
+  id           String    @id @default(uuid())
+  userId       String    @map("user_id")
+  wordId       String    @map("word_id")
+  isBookmarked Boolean   @default(false) @map("is_bookmarked")
+  lastReviewed DateTime? @default(now()) @map("last_reviewed")
+
+  // Relationships
+  user User @relation(fields: [userId], references: [id])
+  word Word @relation(fields: [wordId], references: [id])
+
+  @@unique([userId, wordId])
+  @@map("user_words")
 }
 
 model Quiz {
   id              String     @id @default(uuid())
   userId          String     @map("user_id")
-  user            User       @relation(fields: [userId], references: [id])
   score           Int
   difficultyLevel Difficulty @map("difficulty_level")
   createdAt       DateTime   @default(now()) @map("created_at")
+
+  // Relationships
+  user User @relation(fields: [userId], references: [id])
 
   @@map("quizzes")
 }
@@ -54,13 +76,15 @@ model Quiz {
 model Leaderboard {
   id         String @id @default(uuid())
   userId     String @unique @map("user_id")
-  user       User   @relation(fields: [userId], references: [id])
   totalScore Int    @default(0) @map("total_score")
-  rank       Int?
+
+  // Relationships
+  user User @relation(fields: [userId], references: [id])
 
   @@map("leaderboard")
 }
 
+// Enums
 enum Role {
   user
   admin
