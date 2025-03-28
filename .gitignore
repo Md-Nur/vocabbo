@@ -39,3 +39,46 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# Prisma-specific ignores
+/prisma/.env
+/prisma/migrations
+!prisma/migrations/.gitkeep  # Optional: keeps empty migrations folder
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Node.js dependencies
+node_modules/
+
+# Prisma client (generated)
+/generated
+.prisma/client/
+
+# Build output
+dist/
+build/
+*.js
+*.js.map
+
+# IDE/Editor specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Testing
+coverage/
+.nyc_output/
+
+# Debug
+debug.log
