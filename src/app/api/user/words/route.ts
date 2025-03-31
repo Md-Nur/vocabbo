@@ -9,8 +9,8 @@ export async function GET(
   if (!params.userId) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
-  const words = await prisma.word.findMany({
-    where: { addedById: params.userId },
+  const words = await prisma.userWord.findMany({
+    where: { userId: params.userId },
   });
   return NextResponse.json(words, { status: 200 });
 }

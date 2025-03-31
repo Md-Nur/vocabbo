@@ -34,7 +34,7 @@ export async function POST(req: Request) {
     maxAge: 60 * 60 * 24 * 3,
   });
 
-  delete existingUser.password;
+  const { password, ...userWithoutPassword } = existingUser;
 
-  return NextResponse.json({ user: existingUser }, { status: 200 });
+  return NextResponse.json(userWithoutPassword, { status: 200 });
 }

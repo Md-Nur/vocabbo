@@ -82,3 +82,6 @@ coverage/
 
 # Debug
 debug.log
+
+# Personal
+/src/lib/blackforest.ts

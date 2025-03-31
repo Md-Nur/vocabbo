@@ -1,43 +1,92 @@
+import errorHandler from "@/lib/errorHandler";
+import { getGroqQuiz } from "@/lib/groq";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
+  // Take the necessary information for the quiz
   const quizz = await req.json();
-  if (!quizz) {
-    return NextResponse.json({ error: "No quizz to add" }, { status: 400 });
+  if (!quizz || !quizz.userId || !quizz.duration || !quizz.difficulty) {
+    return NextResponse.json(
+      { error: "Please provide necessary information" },
+      { status: 400 }
+    );
   }
-  try {
-    const newQuizz = await prisma.quizz.create({
-      data: quizz,
-    });
-    try {
-      let leaderboard = await prisma.leaderboard.findUnique({
-        where: {
-          userId: quizz.userId,
-        },
-      });
-      if (leaderboard) {
-        leaderboard = await prisma.leaderboard.update({
-          where: {
-            id: leaderboard.id,
-          },
-          data: {
-            totalScore: leaderboard.totalScore + quizz.score,
-          },
-        });
-      } else {
-        leaderboard = await prisma.leaderboard.create({
-          data: {
-            userId: quizz.userId,
-            totalScore: quizz.score,
-          },
-        });
-      }
-    } catch (error) {
-      return NextResponse.json(error, { status: 400 });
-    }
-    return NextResponse.json(newQuizz, { status: 200 });
-  } catch (error) {
-    return NextResponse.json(error, { status: 400 });
+
+  // Collect the learned words from the database
+  let learnedWords = await errorHandler(
+    prisma.userWord.findMany({
+      where: {
+        userId: quizz.userId,
+      },
+      select: {
+        word: true,
+      },
+    })
+  );
+  if (learnedWords.length === 0) {
+    learnedWords = await errorHandler(prisma.word.findMany({}));
   }
+
+  const learnedWordsArray = learnedWords.map(
+    (word: { word: { word: string } }) => word.word.word
+  );
+
+  // Generate quiz with Groq API
+  const quizWithQuestions = await errorHandler(
+    getGroqQuiz(learnedWordsArray, quizz.difficulty, quizz.duration)
+  );
+
+  // Insert data in quiz table
+  const newQuizz = await errorHandler(
+    prisma.quiz.create({
+      data: {
+        duration: quizz.duration,
+        difficulty: quizz.difficulty,
+        userId: quizz.userId,
+      },
+    })
+  );
+
+  // Insert data in quizAttempt table
+  const quizAttempt = await errorHandler(
+    prisma.quizAttempt.create({
+      data: {
+        quizId: newQuizz.id,
+        userId: quizz.userId,
+        status: "IN_PROGRESS",
+      },
+    })
+  );
+
+  // Insert data in quizQuestion table
+  const quizQuestions = await errorHandler(
+    prisma.quizQuestion.createManyAndReturn({
+      data: quizWithQuestions.questions.map(
+        (question: {
+          questionType: string;
+          questionText: string;
+          options?: string[];
+          correctAnswer: string;
+          explanation: string;
+          points: number;
+        }) => ({
+          quizId: newQuizz.id,
+          ...question,
+        })
+      ),
+    })
+  );
+
+  // Send the questions after filtering
+  const filteredQuestions = {
+    userId: quizz.userId,
+    quizAttempt: quizAttempt,
+    quiz: newQuizz,
+    quizQuestions: quizQuestions.map((question: any) => {
+      const { correctAnswer, explanation, ...rest } = question;
+      return rest;
+    }),
+  };
+  return NextResponse.json(filteredQuestions, { status: 200 });
 }
