@@ -15,8 +15,12 @@ export default function Logout() {
       dispatch(clearUser());
       toast.success("Logged out successfully");
       router.push("/auth/login");
-    } catch (error) {
-      toast.error("Failed to logout");
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response?.data?.error) {
+        toast.error(error.response.data.error);
+      } else {
+        toast.error("Failed to logout");
+      }
     }
   };
 

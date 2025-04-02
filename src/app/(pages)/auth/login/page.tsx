@@ -1,16 +1,17 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { toast } from "sonner";
 import axios from "axios";
-import { useAppDispatch } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setUser } from "@/store/slices/userSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "@/components/FormUI/button";
 import Input from "@/components/FormUI/input";
 import { getPreviousRoute } from "@/lib/utils";
+import Link from "next/link";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -24,6 +25,13 @@ export default function LoginPage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
+  const { user } = useAppSelector((state) => state.user);
+
+  useEffect(() => {
+    if (user?.id) {
+      router.push(getPreviousRoute());
+    }
+  }, [user]);
 
   const {
     register,
@@ -39,10 +47,12 @@ export default function LoginPage() {
       const response = await axios.post("/api/auth/login", data);
       dispatch(setUser(response.data));
       toast.success("Login successful!");
-      
-      router.push(getPreviousRoute());
-    } catch (error) {
-      toast.error("Invalid email or password");
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response?.data?.error) {
+        toast.error(error.response.data.error);
+      } else {
+        toast.error("Invalid email or password");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -51,9 +61,12 @@ export default function LoginPage() {
   return (
     <div className="hero min-h-screen">
       <div className="hero-content flex-col lg:flex-row-reverse">
-        <div className="text-center lg:text-left">
-          <h1 className="text-5xl font-bold">Welcome Back</h1>
+        <div className="text-center lg:text-left md:min-w-96 min-w-72">
+          <h1 className="text-3xl md:text-5xl font-bold">Welcome Back</h1>
           <p className="py-6">Please enter your email and password to login.</p>
+          <Link href="/auth/signup" className="link link-hover link-secondary">
+            Don't have an account? Sign up
+          </Link>
         </div>
         <div className="card bg-base-200 w-full max-w-sm shrink-0 shadow-2xl">
           <div className="card-body">

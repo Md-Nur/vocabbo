@@ -18,8 +18,11 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<User | null>) => {
-      state.user = action.payload;
+      // Clear previous state before setting new user
+      state.user = null;
       state.error = null;
+      // Set new user data
+      state.user = action.payload;
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
@@ -28,8 +31,10 @@ const userSlice = createSlice({
       state.error = action.payload;
     },
     clearUser: (state) => {
+      // Clear all state
       state.user = null;
       state.error = null;
+      state.loading = false;
     },
   },
 });
