@@ -1,12 +1,13 @@
 import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const word = await prisma.word.findUnique({
-    where: { id: params.id },
+    where: { id },
   });
   if (!word) {
     return new Response("Word not found", { status: 404 });

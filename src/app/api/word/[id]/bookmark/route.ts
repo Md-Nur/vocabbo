@@ -1,22 +1,26 @@
 import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { UserWord } from "@prisma/client";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(
-  req: Request,
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const userWord = await req.json();
+  const { id } = await params;
+  const userWord: { userId: string; isBookmarked: boolean } = await request.json();
 
   const word = await prisma.word.findUnique({
-    where: { id: params.id },
+    where: { id },
   });
   if (!word) {
     return new Response("Word not found", { status: 404 });
   }
   let newUserWord = await prisma.userWord.findUnique({
     where: {
-      userId: userWord.userId,
-      wordId: word.id,
+      userId_wordId: {
+        userId: userWord.userId,
+        wordId: word.id,
+      },
     },
   });
   if (newUserWord) {
@@ -33,7 +37,7 @@ export async function PUT(
       data: {
         userId: userWord.userId,
         wordId: word.id,
-        isBookmarked: word.isBookmarked,
+        isBookmarked: userWord.isBookmarked,
       },
     });
   }

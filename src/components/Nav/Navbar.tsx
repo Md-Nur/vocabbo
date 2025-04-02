@@ -5,7 +5,8 @@ import Logout from "./Logout";
 import { ReactNode } from "react";
 import NavRoutes from "./NavRoutes";
 import { IoMdMenu } from "react-icons/io";
-export default function Navbar({ children }: { children: ReactNode }) {
+
+export default function Navbar({ children }: { children?: ReactNode }) {
   const user = useAppSelector((state) => state.user.user);
 
   return (

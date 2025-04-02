@@ -1,16 +1,17 @@
 import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 // This function will change the word satatus
 export async function GET(
-  req: Request,
-  { params }: { params: { userId: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ userId: string }> }
 ) {
-  if (!params.userId) {
+  const { userId } = await params;
+  if (!userId) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
   const words = await prisma.userWord.findMany({
-    where: { userId: params.userId },
+    where: { userId: userId },
   });
   return NextResponse.json(words, { status: 200 });
 }
