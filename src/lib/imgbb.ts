@@ -15,12 +15,15 @@ export async function imgbb(word: {
     throw new Error("Word is not defined");
   }
   const prompt = `Generate an image of ${word.word} in the category of ${word.category} with the meaning of ${word.meaning}. The image should be a ${word.prompt}.`;
-  const file = await dalle(prompt);
-  const buffer = file.base64;
-  const formData = new FormData();
-  formData.append("image", buffer);
 
   try {
+    const file = await dalle(prompt);
+    const buffer = file?.base64;
+    if (!buffer) {
+      throw new Error("Buffer is not defined");
+    }
+    const formData = new FormData();
+    formData.append("image", buffer);
     const response = await axios.post(
       `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
       formData

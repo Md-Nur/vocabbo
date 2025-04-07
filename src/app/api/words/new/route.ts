@@ -4,30 +4,19 @@ import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  let { user, number_of_words } = await req.json();
+  let { user, number_of_words, learnedWords } = await req.json();
 
   if (!user || !user.id || !user.interests || !user.difficulty) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
+
+  console.log(user, number_of_words);
   if (!number_of_words) {
     number_of_words = 100;
   }
-
-  let learnedWords: any[] = await prisma.word.findMany({
-    take: number_of_words * 3,
-    orderBy: {
-      createdAt: "desc",
-    },
-    where: {
-      addedById: user.id,
-    },
-    select: {
-      word: true,
-    },
-  });
-
-  learnedWords = learnedWords.map((word) => word.word);
-
+  if (!learnedWords) {
+    learnedWords = [];
+  }
   // more words will be ai generated for now just get other words
   try {
     const result = await getGroqWords(
@@ -36,6 +25,18 @@ export async function POST(req: Request) {
       user.difficulty,
       learnedWords
     );
+
+    // Validate that we got exactly the requested number of words
+    if (result.length !== number_of_words) {
+      console.error(
+        `Expected ${number_of_words} words but got ${result.length}`
+      );
+      return NextResponse.json(
+        { error: `Failed to generate exactly ${number_of_words} words` },
+        { status: 500 }
+      );
+    }
+
     var newWords = result.map(
       (word: {
         word: string;
@@ -65,7 +66,11 @@ export async function POST(req: Request) {
       async start(controller) {
         for (const newWord of newWords) {
           try {
-            newWord.imageUrl = await imgbb(newWord);
+            if (false) {
+              newWord.imageUrl = await imgbb(newWord);
+            } else {
+              newWord.imageUrl = null;
+            }
           } catch (error) {
             console.error("Error uploading image:", error);
             newWord.imageUrl = null;

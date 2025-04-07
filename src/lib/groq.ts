@@ -9,14 +9,15 @@ export async function getGroqWords(
   learnedWords: string[]
 ) {
   const prompt = `
-      Generate a list of ${number_of_words} words with meaning and examples of sentences based on the user's interests and difficulty level among easy, medium, hard. Also give a prompt for that word that can be generate an image and avoid using words already learned by the user. :
+      Generate EXACTLY ${number_of_words} words (no more, no less) with meaning and examples of sentences based on the user's interests and difficulty level among easy, medium, hard. Also give a prompt for that word that can be generate an image and avoid using words already learned by the user.
       Follow these rules:
+      1. Generate EXACTLY ${number_of_words} words - this is a strict requirement.
       2. Use the user's interests: ${interests.join(", ")}.
       3. Use the user's difficulty level: ${difficulty}.
       4. Avoid using words already learned by the user: ${learnedWords.join(
         ", "
       )}.
-      5. Ensure the words are unique and the length of the array should be ${number_of_words}.
+      5. Ensure the words are unique.
       `;
   try {
     const result = await generateObject({

@@ -15,6 +15,6 @@ export async function dalle(prompt: string) {
     return image;
   } catch (error) {
     console.error("Error generating image:", error);
-    throw new Error("Failed to generate image");
+    // throw new Error("Failed to generate image");
   }
 }

@@ -1,0 +1,5 @@
+1. image customize by the user
+2. login and singup page's form should in right side and add an illustration in the left side
+3. Making sentence and words in the quiz section
+4. Remove short question form the question
+5. user's native language add

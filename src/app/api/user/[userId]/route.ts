@@ -12,6 +12,12 @@ export async function GET(
   }
   const words = await prisma.userWord.findMany({
     where: { userId: userId },
+    include: {
+      word: true,
+    },
   });
-  return NextResponse.json(words, { status: 200 });
+  return NextResponse.json(
+    words.map((word) => word.word),
+    { status: 200 }
+  );
 }

@@ -16,14 +16,20 @@ const NavRoutes = () => {
           { name: "Quiz Results", url: "/quiz-results" },
         ]}
       />
+      <NavDropdown
+        name="Words"
+        routes={[
+          { name: "New Word", url: "/new-words" },
+          { name: "My Words", url: "/my-words" },
+          { name: "Word List", url: "/word-list" },
+          { name: "Bookmarks", url: "/bookmarks" },
+        ]}
+      />
 
       {user?.role === "admin" && (
         <NavDropdown
           name="Admin"
-          routes={[
-            { name: "User Approval", url: "/admin/user-approval" },
-            { name: "Content Approval", url: "/admin/content-approval" },
-          ]}
+          routes={[{ name: "User Approval", url: "/admin/user-approval" }]}
         />
       )}
 
@@ -35,7 +41,7 @@ const NavRoutes = () => {
       ) : (
         <>
           <NavLink name="login" route="/auth/login" />
-          <NavLink name="join" route="/join/1" />
+          <NavLink name="signup" route="/auth/signup" />
         </>
       )}
     </>
