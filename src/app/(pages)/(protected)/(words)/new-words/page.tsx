@@ -84,7 +84,7 @@ const NewWords = () => {
       } else {
         toast.error("Something went wrong");
       }
-      redirect("/my-words");
+      redirect("/my-words/1");
     }
   }, [
     learnWords.isSuccess,

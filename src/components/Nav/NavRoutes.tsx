@@ -20,7 +20,7 @@ const NavRoutes = () => {
         name="Words"
         routes={[
           { name: "New Word", url: "/new-words" },
-          { name: "My Words", url: "/my-words" },
+          { name: "My Words", url: "/my-words/1" },
           { name: "Word List", url: "/word-list" },
           { name: "Bookmarks", url: "/bookmarks" },
         ]}

@@ -10,7 +10,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
-  console.log(user, number_of_words);
   if (!number_of_words) {
     number_of_words = 100;
   }
@@ -66,7 +65,7 @@ export async function POST(req: Request) {
       async start(controller) {
         for (const newWord of newWords) {
           try {
-            if (false) {
+            if (user?.isImgEnabled) {
               newWord.imageUrl = await imgbb(newWord);
             } else {
               newWord.imageUrl = null;

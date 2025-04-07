@@ -59,18 +59,13 @@ export async function getGroqQuiz(
   difficulty: string,
   quizDuration: number
 ) {
-  const QuestionType = [
-    "MULTIPLE_CHOICE",
-    "TRUE_FALSE",
-    "FILL_IN_THE_BLANK",
-    "SHORT_ANSWER",
-  ];
+  const QuestionType = ["MULTIPLE_CHOICE", "TRUE_FALSE", "FILL_IN_THE_BLANK"];
 
   const prompt = `
   {
     "questions": [
       {
-        "questionType": "MULTIPLE_CHOICE|FILL_IN_THE_BLANK|TRUE_FALSE|MATCHING|SHORT_ANSWER",
+        "questionType": "${QuestionType.join("|")}",
         "questionText": "string",
         "options": ["string"], // Required for MULTIPLE_CHOICE types
         "correctAnswer": "string",

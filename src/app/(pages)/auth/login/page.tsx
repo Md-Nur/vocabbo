@@ -60,7 +60,7 @@ export default function LoginPage() {
 
   return (
     <div className="hero min-h-screen">
-      <div className="hero-content flex-col lg:flex-row-reverse">
+      <div className="hero-content flex-col lg:flex-row">
         <div className="text-center lg:text-left md:min-w-96 min-w-72">
           <h1 className="text-3xl md:text-5xl font-bold">Welcome Back</h1>
           <p className="py-6">Please enter your email and password to login.</p>

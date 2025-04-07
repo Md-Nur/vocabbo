@@ -17,6 +17,7 @@ model User {
   interests    String[]      @default(["all"])
   createdAt    DateTime      @default(now()) @map("created_at")
   difficulty   Difficulty    @default(easy)
+  isImgEnabled Boolean       @default(false)
   // Relationships
   addedWords   Word[]        @relation("AddedWords")
   interactions UserWord[]

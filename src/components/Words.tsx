@@ -21,7 +21,7 @@ const Words = ({ words }: { words: Word[] }) => {
             <h2 className="card-title">{word.word}</h2>
             <p>{word.meaning}</p>
             <div className="card-actions justify-end">
-              <div className="badge badge-secondary">{word.category}</div>
+              <div className="badge badge-neutral">{word.category}</div>
             </div>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { UserWord } from "@prisma/client";
 
 export async function POST(req: Request) {
   const { user, number_of_words } = await req.json();
@@ -10,22 +11,26 @@ export async function POST(req: Request) {
       { status: 404 }
     );
   }
-  let learnedWords: any[] = await prisma.word.findMany({
-    take: number_of_words * 3,
-    orderBy: {
-      createdAt: "desc",
-    },
+
+  const learnedWords = await prisma.userWord.findMany({
     where: {
-      addedById: user.id,
+      userId: user.id,
     },
     select: {
       word: true,
-      createdAt: true,
+      lastReviewed: true,
     },
+    orderBy: {
+      lastReviewed: "desc",
+    },
+    take: number_of_words * 3,
   });
 
+  if (learnedWords.length === 0) {
+    return NextResponse.json([], { status: 200 });
+  }
   if (
-    new Date().getTime() - new Date(learnedWords[0].createdAt).getTime() <
+    new Date().getTime() - new Date(learnedWords[0].lastReviewed!).getTime() <
     1000 * 60 * 60 * 24
   ) {
     return NextResponse.json(
@@ -34,6 +39,6 @@ export async function POST(req: Request) {
     );
   }
 
-  learnedWords = learnedWords.map((word) => word.word);
-  return NextResponse.json(learnedWords, { status: 200 });
+  const words: string[] = learnedWords.map((word) => word.word.word);
+  return NextResponse.json(words, { status: 200 });
 }
