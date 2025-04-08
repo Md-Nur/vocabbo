@@ -9,6 +9,12 @@ export async function GET(
 ) {
   const { userId } = await params;
   const page = request.nextUrl.searchParams.get("page") || "1";
+  const filter =
+    request.nextUrl.searchParams
+      .get("filter")
+      ?.toLowerCase()
+      .trim()
+      .replace(/-/g, " ") || "";
 
   if (!userId) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
@@ -21,12 +27,17 @@ export async function GET(
     include: {
       word: true,
     },
+    
+    distinct: ["wordId"],
     skip: (parseInt(page!) - 1) * WORDS_PER_PAGE,
     take: WORDS_PER_PAGE,
   });
   const totalWords = await prisma.userWord.count({
     where: { userId: userId },
   });
+  if (totalWords === 0) {
+    return NextResponse.json({ error: "No words found" }, { status: 404 });
+  }
   const totalPages = Math.ceil(totalWords / WORDS_PER_PAGE);
   return NextResponse.json(
     {

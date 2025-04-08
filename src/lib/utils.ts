@@ -5,7 +5,12 @@ export const storePreviousRoute = (path: string) => {
 };
 
 export const getPreviousRoute = () => {
-  return sessionStorage.getItem("previousRoute") || "/";
+  const previousRoute = sessionStorage.getItem("previousRoute");
+  if (previousRoute) {
+    sessionStorage.removeItem("previousRoute");
+    return previousRoute;
+  }
+  return "/";
 };
 
 export const clearPreviousRoute = () => {

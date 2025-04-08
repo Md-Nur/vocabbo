@@ -64,7 +64,7 @@ export default function LoginPage() {
         <div className="text-center lg:text-left md:min-w-96 min-w-72">
           <h1 className="text-3xl md:text-5xl font-bold">Welcome Back</h1>
           <p className="py-6">Please enter your email and password to login.</p>
-          <Link href="/auth/signup" className="link link-hover link-secondary">
+          <Link href="/auth/signup/1" className="link link-hover link-secondary">
             Don't have an account? Sign up
           </Link>
         </div>

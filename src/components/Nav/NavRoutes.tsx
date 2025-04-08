@@ -21,7 +21,7 @@ const NavRoutes = () => {
         routes={[
           { name: "New Word", url: "/new-words" },
           { name: "My Words", url: "/my-words/1" },
-          { name: "Word List", url: "/word-list" },
+          { name: "Word List", url: "/word-list/1" },
           { name: "Bookmarks", url: "/bookmarks" },
         ]}
       />
@@ -41,7 +41,7 @@ const NavRoutes = () => {
       ) : (
         <>
           <NavLink name="login" route="/auth/login" />
-          <NavLink name="signup" route="/auth/signup" />
+          <NavLink name="signup" route="/auth/signup/1" />
         </>
       )}
     </>

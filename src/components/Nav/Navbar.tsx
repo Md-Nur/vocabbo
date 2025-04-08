@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { useAppSelector } from "@/store/hooks";
-import Logout from "./Logout";
 import { ReactNode } from "react";
 import NavRoutes from "./NavRoutes";
 import { IoMdMenu } from "react-icons/io";

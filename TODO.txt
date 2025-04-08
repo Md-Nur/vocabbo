@@ -1,5 +1,4 @@
 3. Making sentence and words in the quiz section
-5. user's native language add
 6. Finish word section
 7. Finish user update section
 8. Finish quiz section
@@ -9,3 +8,4 @@ Done:
 1. image customize by the user
 2. login and singup page's form should in right side and add an illustration in the left side
 4. Remove short question form the question
+5. user's native language and learning language add

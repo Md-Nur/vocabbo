@@ -4,14 +4,20 @@ import { useQuery } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import Words from "@/components/Words";
 import Loading from "@/components/Loading";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { use } from "react";
 import Pagination from "@/components/Pagination";
 import { toast } from "sonner";
+import Search from "@/components/Search";
+import Filter from "@/components/Filter";
 
 const MyWords = ({ params }: { params: Promise<{ page_no: number }> }) => {
   const resolvedParams: { page_no: number } = use(params);
-  const user = useAppSelector((state) => state.user.user);
+  const searchParams = useSearchParams();
+  const search =
+    searchParams.get("search")?.toLowerCase().trim().replace(/ /g, "-") || "";
+  const filter =
+    searchParams.get("filter")?.toLowerCase().trim().replace(/ /g, "-") || "";
   const router = useRouter();
   const {
     data: words,
@@ -19,10 +25,10 @@ const MyWords = ({ params }: { params: Promise<{ page_no: number }> }) => {
     error,
     isError,
   } = useQuery({
-    queryKey: ["my-words", resolvedParams.page_no],
+    queryKey: ["word-list", resolvedParams.page_no, search, filter],
     queryFn: async () => {
       const response = await axios.get(
-        `/api/user/${user?.id}?page=${resolvedParams.page_no}`
+        `/api/words?page=${resolvedParams.page_no}&search=${search}&filter=${filter}`
       );
       return response.data;
     },
@@ -33,8 +39,9 @@ const MyWords = ({ params }: { params: Promise<{ page_no: number }> }) => {
     return (
       <div className="w-full">
         <h1 className="text-2xl md:text-5xl font-bold text-center my-5 md:my-10">
-          My Words
+          Word List
         </h1>
+        <Search />
         <div className="text-center text-red-500 my-10 text-2xl">
           {error instanceof AxiosError && error.response?.data?.error
             ? error.response.data.error
@@ -44,22 +51,23 @@ const MyWords = ({ params }: { params: Promise<{ page_no: number }> }) => {
     );
   } else if (resolvedParams.page_no > words.totalPages) {
     toast.error("Page not found");
-    router.push(`/my-words/${words.totalPages}`);
+    router.push(`/word-list/${words.totalPages}`);
   } else if (resolvedParams.page_no < 1) {
     toast.error("Page not found");
-    router.push(`/my-words/1`);
+    router.push(`/word-list/1`);
   }
   return (
     <div className="w-full">
       <h1 className="text-2xl md:text-5xl font-bold text-center my-5 md:my-10">
-        My Words
+        Word List
       </h1>
-
+      <Search />
+      <Filter options={words.filterOptions} />
       <Words words={words.words} />
       <Pagination
         totalPages={words.totalPages}
         pageNo={resolvedParams.page_no}
-        path="/my-words"
+        path="/word-list"
       />
     </div>
   );

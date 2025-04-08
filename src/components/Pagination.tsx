@@ -1,4 +1,4 @@
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const Pagination = ({
   totalPages,
@@ -10,8 +10,21 @@ const Pagination = ({
   path: string;
 }) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const search = searchParams
+    .get("search")
+    ?.toLowerCase()
+    .trim()
+    .replace(/-/g, " ");
+  const searchQuery = search ? `?search=${search}` : "";
+  const filter = searchParams.get("filter")
+    ?.toLowerCase()
+    .trim()
+    .replace(/-/g, " ");
+  const filterQuery = filter ? `?filter=${filter}` : "";
+  if (totalPages < 2) return null;
   return (
-    <div className="flex justify-center my-5">
+    <div className="flex justify-center my-10">
       <div className="join">
         {Array.from({ length: totalPages }).map((_, index) =>
           index === 0 ||
@@ -25,7 +38,7 @@ const Pagination = ({
               aria-label={`${index + 1}`}
               checked={index + 1 == pageNo}
               onChange={() => {
-                router.push(`${path}/${index + 1}`);
+                router.push(`${path}/${index + 1}${searchQuery}${filterQuery}`);
               }}
             />
           ) : index === 1 || index === totalPages - 2 ? (

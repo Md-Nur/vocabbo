@@ -17,9 +17,7 @@ const Select = ({ label, errors, options, ...props }: SelectProps) => {
         </label>
       )}
       <select className="select select-bordered w-full" {...props}>
-        <option disabled defaultValue="">
-          Select an option
-        </option>
+        <option defaultValue={label}>Select an option</option>
         {options.map((option) => (
           <option
             className="capitalize"

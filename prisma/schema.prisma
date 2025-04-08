@@ -9,22 +9,25 @@ datasource db {
 }
 
 model User {
-  id           String        @id @default(uuid())
-  name         String
-  email        String        @unique
-  password     String
-  role         Role          @default(user)
-  interests    String[]      @default(["all"])
-  createdAt    DateTime      @default(now()) @map("created_at")
-  difficulty   Difficulty    @default(easy)
-  isImgEnabled Boolean       @default(false)
+  id               String        @id @default(uuid())
+  name             String
+  email            String        @unique
+  password         String
+  role             Role          @default(user)
+  interests        String[]      @default(["all"])
+  createdAt        DateTime      @default(now()) @map("created_at")
+  difficulty       Difficulty    @default(easy)
+  isImgEnabled     Boolean       @default(false)
+  isVideoEnabled   Boolean       @default(false)
+  nativeLanguage   String?
+  learningLanguage String?
   // Relationships
-  addedWords   Word[]        @relation("AddedWords")
-  interactions UserWord[]
-  quizzes      Quiz[]
-  leaderboard  Leaderboard?
-  QuizAttempt  QuizAttempt[]
-  QuizResult   QuizResult[]
+  addedWords       Word[]        @relation("AddedWords")
+  interactions     UserWord[]
+  quizzes          Quiz[]
+  leaderboard      Leaderboard?
+  QuizAttempt      QuizAttempt[]
+  QuizResult       QuizResult[]
 
   @@map("users")
 }
