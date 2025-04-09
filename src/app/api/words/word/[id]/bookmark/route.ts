@@ -7,7 +7,8 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const userWord: { userId: string; isBookmarked: boolean } = await request.json();
+  const userWord: { userId: string; isBookmarked: boolean } =
+    await request.json();
 
   const word = await prisma.word.findUnique({
     where: { id },
@@ -41,5 +42,8 @@ export async function PUT(
       },
     });
   }
-  return NextResponse.json(newUserWord, { status: 200 });
+  return NextResponse.json(
+    { isBookmarked: newUserWord.isBookmarked },
+    { status: 200 }
+  );
 }

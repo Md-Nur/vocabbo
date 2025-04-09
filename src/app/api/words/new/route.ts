@@ -22,6 +22,7 @@ export async function POST(req: Request) {
       number_of_words,
       user.interests,
       user.difficulty,
+      user.learningLanguage,
       learnedWords
     );
 

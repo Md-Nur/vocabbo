@@ -9,31 +9,28 @@ export async function GET(
 ) {
   const { userId } = await params;
   const page = request.nextUrl.searchParams.get("page") || "1";
-  const filter =
-    request.nextUrl.searchParams
-      .get("filter")
-      ?.toLowerCase()
-      .trim()
-      .replace(/-/g, " ") || "";
+  const bookmark = !!parseInt(
+    request?.nextUrl?.searchParams?.get("bookmark") || "0"
+  );
 
   if (!userId) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
   const words = await prisma.userWord.findMany({
-    where: { userId: userId },
+    where: { userId: userId, isBookmarked: bookmark ? bookmark : undefined },
     orderBy: {
       lastReviewed: "desc",
     },
     include: {
       word: true,
     },
-    
+
     distinct: ["wordId"],
     skip: (parseInt(page!) - 1) * WORDS_PER_PAGE,
     take: WORDS_PER_PAGE,
   });
   const totalWords = await prisma.userWord.count({
-    where: { userId: userId },
+    where: { userId: userId, isBookmarked: bookmark ? bookmark : undefined },
   });
   if (totalWords === 0) {
     return NextResponse.json({ error: "No words found" }, { status: 404 });

@@ -1,11 +1,16 @@
 "use client";
 import { Word } from "@prisma/client";
+import Link from "next/link";
 
 const Words = ({ words }: { words: Word[] }) => {
   return (
     <div className="flex flex-col justify-center items-center md:items-stretch gap-5 md:flex-row flex-wrap my-10">
       {words.map((word) => (
-        <div key={word?.id} className="card bg-base-200 w-80 sm:w-96 shadow-sm">
+        <Link
+          href={`/word/${word?.id}`}
+          key={word?.id}
+          className="card bg-base-200 w-80 sm:w-96 shadow-sm"
+        >
           {word?.imageUrl && (
             <figure>
               <img
@@ -24,7 +29,7 @@ const Words = ({ words }: { words: Word[] }) => {
               <div className="badge badge-neutral">{word.category}</div>
             </div>
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   );

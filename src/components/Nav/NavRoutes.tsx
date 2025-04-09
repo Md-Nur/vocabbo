@@ -22,7 +22,7 @@ const NavRoutes = () => {
           { name: "New Word", url: "/new-words" },
           { name: "My Words", url: "/my-words/1" },
           { name: "Word List", url: "/word-list/1" },
-          { name: "Bookmarks", url: "/bookmarks" },
+          { name: "Bookmarks", url: "/bookmarks/1" },
         ]}
       />
 
