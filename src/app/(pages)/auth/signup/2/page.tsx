@@ -5,6 +5,7 @@ import Input from "@/components/FormUI/input";
 import Select from "@/components/FormUI/select";
 import Textarea from "@/components/FormUI/textarea";
 import { useSignUpContext } from "@/context/SignUpContext";
+import { languages } from "@/lib/translate";
 import { useAppDispatch } from "@/store/hooks";
 import { setUser } from "@/store/slices/userSlice";
 import { useMutation } from "@tanstack/react-query";
@@ -83,19 +84,23 @@ const SignUp2 = () => {
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-6">
-      <Input
+      <Select
         label="Native Language"
-        placeholder="e.g. English"
-        type="text"
         {...register("nativeLanguage")}
         errors={errors.nativeLanguage}
+        options={Object.keys(languages).map((lan) => ({
+          label: lan,
+          value: lan,
+        }))}
       />
-      <Input
+      <Select
         label="Learning Language"
-        placeholder="e.g. Spanish"
-        type="text"
         {...register("learningLanguage")}
-        errors={errors.learningLanguage}
+        errors={errors?.learningLanguage}
+        options={Object.keys(languages).map((lan) => ({
+          label: lan,
+          value: lan,
+        }))}
       />
       <Textarea
         label="Interest"

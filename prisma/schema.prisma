@@ -9,25 +9,26 @@ datasource db {
 }
 
 model User {
-  id               String        @id @default(uuid())
+  id               String          @id @default(uuid())
   name             String
-  email            String        @unique
+  email            String          @unique
   password         String
-  role             Role          @default(user)
-  interests        String[]      @default(["all"])
-  createdAt        DateTime      @default(now()) @map("created_at")
-  difficulty       Difficulty    @default(easy)
-  isImgEnabled     Boolean       @default(false)
-  isVideoEnabled   Boolean       @default(false)
-  nativeLanguage   String?
-  learningLanguage String?
+  role             Role            @default(user)
+  interests        String[]        @default(["all"])
+  difficulty       Difficulty      @default(easy)
+  isImgEnabled     Boolean         @default(false)
+  isVideoEnabled   Boolean         @default(false)
+  nativeLanguage   Language?       @default(English)
+  learningLanguage Language?       @default(English)
+  createdAt        DateTime        @default(now()) @map("created_at")
   // Relationships
-  addedWords       Word[]        @relation("AddedWords")
+  addedWords       Word[]          @relation("AddedWords")
   interactions     UserWord[]
   quizzes          Quiz[]
   leaderboard      Leaderboard?
   QuizAttempt      QuizAttempt[]
   QuizResult       QuizResult[]
+  TranslateWord    TranslateWord[]
 
   @@map("users")
 }
@@ -45,9 +46,10 @@ model Word {
   prompt           String?    @map("prompt")
 
   // Relationships
-  addedById    String     @map("added_by")
-  addedBy      User       @relation("AddedWords", fields: [addedById], references: [id])
-  interactions UserWord[]
+  addedById     String          @map("added_by")
+  addedBy       User            @relation("AddedWords", fields: [addedById], references: [id])
+  interactions  UserWord[]
+  translateWord TranslateWord[]
 
   @@map("words")
 }
@@ -65,6 +67,21 @@ model UserWord {
 
   @@unique([userId, wordId])
   @@map("user_words")
+}
+
+model TranslateWord {
+  id                         String   @id @default(uuid())
+  wordId                     String
+  word                       Word     @relation(fields: [wordId], references: [id])
+  wordLanguage               Language
+  translatedWordLanguage     Language
+  translatedWord             String
+  translatedMeaning          String
+  translatedExampleSentences String[]
+  translatedCategory         String?
+  userId                     String
+  user                       User     @relation(fields: [userId], references: [id])
+  createdAt                  DateTime @default(now())
 }
 
 model Quiz {
@@ -154,4 +171,142 @@ enum AttemptStatus {
   COMPLETED
   ABANDONED
   TIMED_OUT
+}
+
+enum Language {
+  Afrikaans
+  Albanian
+  Amharic
+  Arabic
+  Armenian
+  Assamese
+  Aymara
+  Azerbaijani
+  Bambara
+  Basque
+  Belarusian
+  Bengali
+  Bhojpuri
+  Bosnian
+  Bulgarian
+  Catalan
+  Cebuano
+  Chinese_Simplified
+  Chinese_Traditional
+  Corsican
+  Croatian
+  Czech
+  Danish
+  Dhivehi
+  Dogri
+  Dutch
+  English
+  Esperanto
+  Estonian
+  Ewe
+  Filipino_Tagalog
+  Finnish
+  French
+  Frisian
+  Galician
+  Georgian
+  German
+  Greek
+  Guarani
+  Gujarati
+  Haitian_Creole
+  Hausa
+  Hawaiian
+  Hebrew
+  Hindi
+  Hmong
+  Hungarian
+  Icelandic
+  Igbo
+  Ilocano
+  Indonesian
+  Irish
+  Italian
+  Japanese
+  Javanese
+  Kannada
+  Kazakh
+  Khmer
+  Kinyarwanda
+  Konkani
+  Korean
+  Krio
+  Kurdish
+  Kurdish_Sorani
+  Kyrgyz
+  Lao
+  Latin
+  Latvian
+  Lingala
+  Lithuanian
+  Luganda
+  Luxembourgish
+  Macedonian
+  Maithili
+  Malagasy
+  Malay
+  Malayalam
+  Maltese
+  Maori
+  Marathi
+  Meiteilon_Manipuri
+  Mizo
+  Mongolian
+  Myanmar_Burmese
+  Nepali
+  Norwegian
+  Nyanja_Chichewa
+  Odia_Oriya
+  Oromo
+  Pashto
+  Persian
+  Polish
+  Portuguese_Portugal
+  Portuguese_Brazil
+  Punjabi
+  Quechua
+  Romanian
+  Russian
+  Samoan
+  Sanskrit
+  Scots_Gaelic
+  Sepedi
+  Serbian
+  Sesotho
+  Shona
+  Sindhi
+  Sinhala_Sinhalese
+  Slovak
+  Slovenian
+  Somali
+  Spanish
+  Sundanese
+  Swahili
+  Swedish
+  Tagalog_Filipino
+  Tajik
+  Tamil
+  Tatar
+  Telugu
+  Thai
+  Tigrinya
+  Tsonga
+  Turkish
+  Turkmen
+  Twi_Akan
+  Ukrainian
+  Urdu
+  Uyghur
+  Uzbek
+  Vietnamese
+  Welsh
+  Xhosa
+  Yiddish
+  Yoruba
+  Zulu
 }

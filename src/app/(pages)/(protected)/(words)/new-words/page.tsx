@@ -5,7 +5,6 @@ import { useAppSelector } from "@/store/hooks";
 import { Word } from "@prisma/client";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios, { isAxiosError } from "axios";
-import Image from "next/image";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -14,12 +13,10 @@ const NewWords = () => {
   const user = useAppSelector((state) => state.user.user);
   const [number_of_words, setNumberOfWords] = useState(5);
   const [words, setWords] = useState<Word[]>([]);
-  const [processedIds] = useState(new Set<string>());
-  const [learnedWords, setLearnedWords] = useState<string[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const newWords = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (learnedWords: string[]) => {
       const response = await axios.post(
         "/api/words/new",
         {
@@ -31,7 +28,7 @@ const NewWords = () => {
           responseType: "text",
         }
       );
-
+      
       return new Promise<Word[]>((resolve, reject) => {
         const words: Word[] = [];
         const lines = response.data
@@ -53,7 +50,7 @@ const NewWords = () => {
     },
 
     onError: (error) => {
-      console.log(error);
+      
       if (isAxiosError(error)) {
         toast.error(error?.response?.data?.error);
       } else {
@@ -71,12 +68,12 @@ const NewWords = () => {
       });
       return response.data;
     },
+    retry: false,
   });
 
   useEffect(() => {
     if (learnWords.isSuccess) {
-      setLearnedWords(learnWords.data);
-      newWords.mutate();
+      newWords.mutate(learnWords.data);
     }
     if (learnWords.isError) {
       if (isAxiosError(learnWords.error)) {
@@ -95,7 +92,7 @@ const NewWords = () => {
 
   // Only show loading when there are no words and we're loading
   if (isLoading && words.length === 0) return <Loading />;
-  // console.log(words[0][0].word);
+  
 
   return (
     <div className="">

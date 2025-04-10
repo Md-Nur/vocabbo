@@ -12,6 +12,7 @@ import Button from "@/components/FormUI/button";
 import Input from "@/components/FormUI/input";
 import { getPreviousRoute } from "@/lib/utils";
 import Link from "next/link";
+import Image from "next/image";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -59,17 +60,18 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="hero min-h-screen">
-      <div className="hero-content flex-col lg:flex-row">
+    <div className="w-full h-full">
+      <h1 className="text-3xl md:text-5xl font-bold text-center my-10">Login</h1>
+      <div className="hero-content flex-col lg:flex-row mx-auto">
         <div className="text-center lg:text-left md:min-w-96 min-w-72">
-          <h1 className="text-3xl md:text-5xl font-bold">Welcome Back</h1>
+          <Image
+            src="/login.png"
+            alt="login"
+            width={500}
+            height={500}
+            className="w-full h-full object-cover max-w-96"
+          />
           <p className="py-6">Please enter your email and password to login.</p>
-          <Link
-            href="/auth/signup/1"
-            className="link link-hover link-secondary"
-          >
-            Don't have an account? Sign up
-          </Link>
         </div>
         <div className="card bg-base-200 w-full max-w-sm shrink-0 shadow-2xl">
           <div className="card-body">
@@ -88,6 +90,13 @@ export default function LoginPage() {
               />
 
               <Button isLoading={isLoading}>Sign in</Button>
+              <br />
+              <Link
+                href="/auth/signup/1"
+                className="link link-hover link-secondary"
+              >
+                Don't have an account? Sign up
+              </Link>
             </form>
           </div>
         </div>

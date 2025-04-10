@@ -1,19 +1,29 @@
+import errorHandler from "@/lib/errorHandler";
 import { getGroqWords } from "@/lib/groq";
 import { imgbb } from "@/lib/imgbb";
 import prisma from "@/lib/prisma";
+import { getTranslateWords } from "@/lib/translate";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   let { user, number_of_words, learnedWords } = await req.json();
 
-  if (!user || !user.id || !user.interests || !user.difficulty) {
+  if (
+    !user ||
+    !user.id ||
+    !user.interests ||
+    !user.difficulty ||
+    !user.learningLanguage ||
+    !learnedWords
+  ) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
   if (!number_of_words) {
     number_of_words = 100;
   }
-  if (!learnedWords) {
+
+  if (!learnedWords.length) {
     learnedWords = [];
   }
   // more words will be ai generated for now just get other words
@@ -22,7 +32,6 @@ export async function POST(req: Request) {
       number_of_words,
       user.interests,
       user.difficulty,
-      user.learningLanguage,
       learnedWords
     );
 
@@ -77,8 +86,46 @@ export async function POST(req: Request) {
           }
 
           try {
+            const learnLanguageWord = await getTranslateWords(
+              {
+                word: newWord.word,
+                meaning: newWord.meaning,
+                exampleSentences: newWord.exampleSentences,
+                category: newWord.category,
+              },
+              user.learningLanguage,
+              "English"
+            );
             var word = await prisma.word.create({
-              data: newWord,
+              data: {
+                ...newWord,
+                word: learnLanguageWord.word,
+                meaning: learnLanguageWord.meaning,
+                exampleSentences: learnLanguageWord.exampleSentences,
+                category: learnLanguageWord.category,
+              },
+            });
+            const translateWord = await getTranslateWords(
+              {
+                word: newWord.word,
+                meaning: newWord.meaning,
+                exampleSentences: newWord.exampleSentences,
+                category: newWord.category,
+              },
+              user.nativeLanguage,
+              "English"
+            );
+            await prisma.translateWord.create({
+              data: {
+                userId: user.id,
+                wordId: word.id,
+                wordLanguage: user.learningLanguage,
+                translatedWordLanguage: user.nativeLanguage,
+                translatedWord: translateWord.word,
+                translatedMeaning: translateWord.meaning,
+                translatedExampleSentences: translateWord.exampleSentences,
+                translatedCategory: translateWord.category,
+              },
             });
           } catch (error) {
             console.error("Error creating word:", error);
@@ -87,20 +134,16 @@ export async function POST(req: Request) {
               { status: 500 }
             );
           }
-          try {
-            await prisma.userWord.create({
+
+          await errorHandler(
+            prisma.userWord.create({
               data: {
                 userId: user.id,
                 wordId: word.id,
               },
-            });
-          } catch (error) {
-            console.error("Error creating user word:", error);
-            return NextResponse.json(
-              { error: "Failed to create user word" },
-              { status: 500 }
-            );
-          }
+            })
+          );
+
           controller.enqueue(encoder.encode(JSON.stringify(word) + "\n"));
         }
         controller.close();

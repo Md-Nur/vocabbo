@@ -20,10 +20,12 @@ const SingleWord = ({ params }: { params: Promise<{ id: string }> }) => {
   } = useQuery({
     queryKey: ["single-word", id],
     queryFn: async () => {
-      const res = await axios.get(`/api/words/word/${id}`);
+      const res = await axios.post(`/api/words/word/${id}`, user);
       return res.data;
     },
   });
+
+  
   const [isBookmarked, setIsBookmarked] = useState<Boolean>(
     word?.interactions.length ? word?.interactions[0]?.isBookmarked : false
   );
@@ -57,7 +59,6 @@ const SingleWord = ({ params }: { params: Promise<{ id: string }> }) => {
     });
     setIsBookmarked(res.data.isBookmarked);
   };
-
   return (
     <div className="hero min-h-screen">
       <div className="hero-content flex-col lg:flex-row">
@@ -71,29 +72,62 @@ const SingleWord = ({ params }: { params: Promise<{ id: string }> }) => {
           />
         )}
         <div>
-          <h1 className="text-5xl font-bold">{word.word}</h1>
-          <p className="py-6">{word.meaning}</p>
-          <ul className="list-disc list-inside">
-            {word.exampleSentences.map((example: string) => (
-              <li key={example}>{example}</li>
-            ))}
-          </ul>
-          <div className="flex gap-2 items-center">
+          <div className="flex w-full gap-5 items-center">
+            <h1 className="text-3xl font-bold">{word?.word}</h1>
+            {word?.translateWord[0] && (
+              <p className="badge badge-primary">
+                {word.translateWord[0].wordLanguage}
+              </p>
+            )}
+            <p className="badge badge-neutral">{word.category}</p>
             <div className="tooltip">
+              <IoBookmarkSharp
+                className={`text-2xl cursor-pointer ${
+                  isBookmarked ? "text-info" : "text-base-content"
+                }`}
+                onClick={handleBookmark}
+              />
               <div className="tooltip-content">
                 <div className="animate-bounce">
                   {isBookmarked ? "Remove Bookmark" : "Add Bookmark"}
                 </div>
               </div>
-              <IoBookmarkSharp
-                className={`btn ${
-                  isBookmarked ? "text-info" : "text-base-content"
-                }`}
-                onClick={handleBookmark}
-              />
             </div>
-            <p className="badge badge-primary">{word.category}</p>
           </div>
+
+          <p className="py-6">{word.meaning}</p>
+          <ul className="list-disc list-inside">
+            {word.exampleSentences.map((example: string, index: number) => (
+              <li key={index}>{example}</li>
+            ))}
+          </ul>
+          <div className="flex gap-2 items-center"></div>
+          {word?.translateWord[0] && (
+            <>
+              <hr className="my-4" />
+              <div className="flex gap-2 items-center">
+                <h1 className="text-3xl font-bold">
+                  {word.translateWord[0]?.translatedWord}
+                </h1>
+                <p className="badge badge-primary">
+                  {word.translateWord[0]?.translatedWordLanguage}
+                </p>
+                {word.translateWord[0]?.translatedCategory && (
+                  <p className="badge badge-neutral">
+                    {word.translateWord[0]?.translatedCategory}
+                  </p>
+                )}
+              </div>
+              <p className="py-6">{word.translateWord[0]?.translatedMeaning}</p>
+              <ul className="list-disc list-inside">
+                {word.translateWord[0]?.translatedExampleSentences.map(
+                  (example: string, index: number) => (
+                    <li key={index}>{example}</li>
+                  )
+                )}
+              </ul>
+            </>
+          )}
         </div>
       </div>
     </div>

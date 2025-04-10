@@ -9,11 +9,13 @@ export async function POST(req: Request) {
   const user = await req.json();
 
   if (
+    !user.name ||
     !user.email ||
     !user.password ||
-    !user.name ||
     !user.interests ||
-    !user.difficulty
+    !user.difficulty ||
+    !user.nativeLanguage ||
+    !user.learningLanguage
   ) {
     return NextResponse.json(
       { error: "Insufficeint information" },
