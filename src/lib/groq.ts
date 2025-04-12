@@ -58,7 +58,8 @@ export async function getGroqInterests(interestes: string) {
 export async function getGroqQuiz(
   words: string[],
   difficulty: string,
-  quizDuration: number
+  quizDuration: number,
+  learningLanguage: string
 ) {
   const QuestionType = ["MULTIPLE_CHOICE", "TRUE_FALSE", "FILL_IN_THE_BLANK"];
 
@@ -86,6 +87,8 @@ export async function getGroqQuiz(
   4. Points: 1 for basic, 2-3 for complex questions
   5. Every field must be filled
   6. Output pure JSON with no formatting or explanations
+  7. Question text must be in ${learningLanguage}
+  8. True/False questions solutions must be in 1 for true and 0 for false
 
   Generate exactly ${Math.floor(quizDuration * 1.5)} questions in JSON format. 
   `;

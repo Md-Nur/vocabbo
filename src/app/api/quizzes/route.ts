@@ -6,7 +6,14 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   // Take the necessary information for the quiz
   const quizz = await req.json();
-  if (!quizz || !quizz.userId || !quizz.duration || !quizz.difficulty) {
+  console.log(quizz);
+  if (
+    !quizz ||
+    !quizz.userId ||
+    !quizz.duration ||
+    !quizz.difficulty ||
+    !quizz.learningLanguage
+  ) {
     return NextResponse.json(
       { error: "Please provide necessary information" },
       { status: 400 }
@@ -34,7 +41,7 @@ export async function POST(req: Request) {
 
   // Generate quiz with Groq API
   const quizWithQuestions = await errorHandler(
-    getGroqQuiz(learnedWordsArray, quizz.difficulty, quizz.duration)
+    getGroqQuiz(learnedWordsArray, quizz.difficulty, quizz.duration, quizz.learningLanguage)
   );
 
   // Insert data in quiz table

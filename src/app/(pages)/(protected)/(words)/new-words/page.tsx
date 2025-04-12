@@ -28,7 +28,7 @@ const NewWords = () => {
           responseType: "text",
         }
       );
-      
+
       return new Promise<Word[]>((resolve, reject) => {
         const words: Word[] = [];
         const lines = response.data
@@ -50,7 +50,6 @@ const NewWords = () => {
     },
 
     onError: (error) => {
-      
       if (isAxiosError(error)) {
         toast.error(error?.response?.data?.error);
       } else {
@@ -60,7 +59,7 @@ const NewWords = () => {
   });
 
   const learnWords = useQuery({
-    queryKey: ["learn-words"],
+    queryKey: ["learn-words", words],
     queryFn: async () => {
       const response = await axios.post("/api/words/learn", {
         user: user,
@@ -72,10 +71,11 @@ const NewWords = () => {
   });
 
   useEffect(() => {
-    if (learnWords.isSuccess) {
+    if (learnWords.isLoading) {
+      setIsLoading(true);
+    } else if (learnWords.isSuccess) {
       newWords.mutate(learnWords.data);
-    }
-    if (learnWords.isError) {
+    } else if (learnWords.isError) {
       if (isAxiosError(learnWords.error)) {
         toast.error(learnWords.error?.response?.data?.error);
       } else {
@@ -92,7 +92,6 @@ const NewWords = () => {
 
   // Only show loading when there are no words and we're loading
   if (isLoading && words.length === 0) return <Loading />;
-  
 
   return (
     <div className="">
