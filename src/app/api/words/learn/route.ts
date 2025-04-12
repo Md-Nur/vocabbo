@@ -26,18 +26,12 @@ export async function POST(req: Request) {
   });
 
   if (learnedWords.length === 0) {
-    return NextResponse.json([], { status: 200 });
+    return NextResponse.json({ words: [], isAvailable: true }, { status: 200 });
   }
-  if (
+  const isAvailable =
     new Date().getTime() - new Date(learnedWords[0].lastReviewed!).getTime() <
-    1000 * 60 * 60 * 24
-  ) {
-    return NextResponse.json(
-      { error: "You have already learned today's words" },
-      { status: 402 }
-    );
-  }
+    1000 * 60 * 60 * 24;
 
-  const words: string[] = learnedWords.map((word) => word.word.word);
-  return NextResponse.json(words, { status: 200 });
+  const words: string[] = learnedWords.map(({ word }) => word.word);
+  return NextResponse.json({ words, isAvailable }, { status: 200 });
 }

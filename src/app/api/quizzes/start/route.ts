@@ -6,7 +6,6 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   // Take the necessary information for the quiz
   const quizz = await req.json();
-  console.log(quizz);
   if (
     !quizz ||
     !quizz.userId ||
@@ -41,7 +40,12 @@ export async function POST(req: Request) {
 
   // Generate quiz with Groq API
   const quizWithQuestions = await errorHandler(
-    getGroqQuiz(learnedWordsArray, quizz.difficulty, quizz.duration, quizz.learningLanguage)
+    getGroqQuiz(
+      learnedWordsArray,
+      quizz.difficulty,
+      quizz.duration,
+      quizz.learningLanguage
+    )
   );
 
   // Insert data in quiz table
@@ -62,6 +66,10 @@ export async function POST(req: Request) {
         quizId: newQuizz.id,
         userId: quizz.userId,
         status: "IN_PROGRESS",
+        totalScore: quizWithQuestions.questions.reduce(
+          (acc: number, question: any) => acc + question.points,
+          0
+        ),
       },
     })
   );
@@ -92,7 +100,7 @@ export async function POST(req: Request) {
     quiz: newQuizz,
     quizQuestions: quizQuestions.map((question: any) => {
       const { correctAnswer, explanation, ...rest } = question;
-      return rest;
+      return { ...rest, answer: "" };
     }),
   };
   return NextResponse.json(filteredQuestions, { status: 200 });

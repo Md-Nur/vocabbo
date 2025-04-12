@@ -46,6 +46,7 @@ const NewWords = () => {
         });
 
         resolve(words);
+        setIsLoading(false);
       });
     },
 
@@ -59,22 +60,27 @@ const NewWords = () => {
   });
 
   const learnWords = useQuery({
-    queryKey: ["learn-words", words],
+    queryKey: ["learn-words"],
     queryFn: async () => {
       const response = await axios.post("/api/words/learn", {
-        user: user,
+        user,
         number_of_words,
       });
       return response.data;
     },
-    retry: false,
   });
 
+  console.log(learnWords.data);
   useEffect(() => {
     if (learnWords.isLoading) {
       setIsLoading(true);
     } else if (learnWords.isSuccess) {
-      newWords.mutate(learnWords.data);
+      if (learnWords.data.isAvailable) {
+        newWords.mutate(learnWords.data.words);
+      } else {
+        toast.error("You have already learned today's words");
+        redirect("/my-words/1");
+      }
     } else if (learnWords.isError) {
       if (isAxiosError(learnWords.error)) {
         toast.error(learnWords.error?.response?.data?.error);

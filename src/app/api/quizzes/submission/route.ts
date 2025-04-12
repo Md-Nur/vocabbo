@@ -14,6 +14,7 @@ export async function POST(req: Request) {
 
   // Process all questions and calculate score
   let score = 0;
+  
   const results = await Promise.all(
     quizQuestions.map(async (question: { id: string; answer?: string }) => {
       if (!question.id) {
@@ -30,7 +31,10 @@ export async function POST(req: Request) {
       );
 
       if (!quizQuestion) {
-        throw new Error(`Question not found: ${question.id}`);
+        return NextResponse.json(
+          { error: `Question not found: ${question.id}` },
+          { status: 404 }
+        );
       }
 
       // Check the answers with the correct answers

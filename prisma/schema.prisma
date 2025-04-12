@@ -114,12 +114,13 @@ model QuizAttempt {
   id          String        @id @default(uuid())
   userId      String
   user        User          @relation(fields: [userId], references: [id])
-  quizId      String
+  quizId      String        @unique
   quiz        Quiz          @relation(fields: [quizId], references: [id])
   startedAt   DateTime      @default(now())
   completedAt DateTime?
   results     QuizResult[]
   score       Float?
+  totalScore  Float?
   status      AttemptStatus @default(IN_PROGRESS)
 }
 

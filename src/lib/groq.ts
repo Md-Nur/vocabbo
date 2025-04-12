@@ -8,6 +8,7 @@ export async function getGroqWords(
   difficulty: string,
   learnedWords: string[]
 ) {
+  console.log(learnedWords);
   const prompt = `
       Generate EXACTLY ${number_of_words} words (no more, no less) with meaning and examples of sentences based on the user's interests and difficulty level among easy, medium, hard. Also give a prompt for that word that can be generate an image and avoid using words already learned by the user.
       Follow these rules:
@@ -76,7 +77,7 @@ export async function getGroqQuiz(
       }
     ]
   }
-  Generate a quiz strictly following this JSON schema. Use these words: ${words.join(
+  Generate a vocabulary quiz strictly following this JSON schema. Use these words: ${words.join(
     ", "
   )}.
 
@@ -88,13 +89,14 @@ export async function getGroqQuiz(
   5. Every field must be filled
   6. Output pure JSON with no formatting or explanations
   7. Question text must be in ${learningLanguage}
-  8. True/False questions solutions must be in 1 for true and 0 for false
+  8. True/False questions solutions must be in T for true and F for false
+  9. This test focuses on vocabulary practice.
 
   Generate exactly ${Math.floor(quizDuration * 1.5)} questions in JSON format. 
   `;
   try {
     const result = await generateObject({
-      model: groq("llama-3.3-70b-versatile"),
+      model: groq("deepseek-r1-distill-llama-70b"),
       system: "You are a strict JSON generator.",
       prompt: prompt,
       schema: z.object({

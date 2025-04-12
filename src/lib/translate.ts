@@ -1,5 +1,8 @@
 import axios from "axios";
 import errorHandler from "./errorHandler";
+import { generateObject } from "ai";
+import { groq } from "@ai-sdk/groq";
+import { z } from "zod";
 
 const headers = {
   "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY,
@@ -157,7 +160,7 @@ const detectLanguage = async (text: string) => {
   );
   return res.data?.lang;
 };
-export const getTranslateWords = async (
+export const getTranslateWords2 = async (
   content: {
     word: string;
     meaning: string;
@@ -199,4 +202,50 @@ export const getTranslateWords = async (
     ],
     category: res.data.translated_json.category,
   };
+};
+export const getTranslateWords = async (
+  content: {
+    word: string;
+    meaning: string;
+    category: string;
+    exampleSentences: string[];
+  },
+  targetLanguage: string,
+  originLanguage: string = "English"
+) => {
+  const prompt = `You are a multilingual assistant. Your task is to translate specific English text fragments into a given target language and output ONLY the translations in the following JSON format.
+
+Target Language
+${targetLanguage}
+
+Input
+- English Word: ${content.word}
+- Meaning: ${content.meaning}
+- Example Sentence 1: ${content.exampleSentences[0]}
+- Example Sentence 2: ${content.exampleSentences[1]}
+- Example Sentence 3: ${content.exampleSentences[2]}
+- Category: ${content.category}
+
+Output
+Translate the above content into the target language (${targetLanguage}), and provide a valid JSON object in the schema below.
+
+JSON Schema:
+{
+  "word": "string",
+  "meaning": "string",
+  "exampleSentences": ["string", "string", "string"],
+  "category": "string"
+}`;
+  const result = await generateObject({
+    model: groq("gemma2-9b-it"),
+    system: "You are a strict JSON generator that translate text.",
+    prompt: prompt,
+    schema: z.object({
+      word: z.string().describe("Word"),
+      meaning: z.string().describe("Meaning"),
+      exampleSentences: z.array(z.string().describe("Example Sentences")),
+      category: z.string().describe("Category"),
+    }),
+  });
+  return result.object;
 };
