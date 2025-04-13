@@ -134,7 +134,6 @@ model QuizResult {
   user       User         @relation(fields: [userId], references: [id])
   userAnswer String?
   isCorrect  Boolean
-  answeredAt DateTime     @default(now())
 }
 
 model Leaderboard {

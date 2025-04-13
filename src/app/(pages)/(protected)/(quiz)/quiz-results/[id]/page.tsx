@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import axios, { isAxiosError } from "axios";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { FaCheck, FaTimes } from "react-icons/fa";
 
 interface QuizResultDetails extends QuizQuestion {
   QuizResult: QuizResult;
@@ -63,44 +64,76 @@ const SingleQuizResult = () => {
     );
   }
   return (
-    <div className="w-full">
-      <h1 className="text-2xl font-bold mb-4">Quiz Result</h1>
+    <div className="w-full max-w-5xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4 text-center">Quiz Result</h1>
       <div className="space-y-4">
         <div className="space-y-2">
-          <p>Quiz ID: {id}</p>
-          <p>Score: {quizResult?.attempts[0]?.score}</p>
-          <p>Total Score: {quizResult?.attempts[0]?.totalScore}</p>
+          <div className="flex gap-5">
+            <span>Score: {quizResult?.attempts[0]?.score}</span>
+            <span>Total Score: {quizResult?.attempts[0]?.totalScore}</span>
+          </div>
           <p>
-            Completed at:{" "}
+            Completed At:&nbsp;
             {quizResult?.attempts[0]?.completedAt
               ? new Date(quizResult.attempts[0].completedAt).toLocaleString()
               : "N/A"}
           </p>
           <p>
-            Time taken:
+            Time taken:&nbsp;
             {quizResult?.duration ? `${quizResult.duration} minutes` : "N/A"}
           </p>
         </div>
 
         {quizResult?.questions && (
           <div className="mt-6">
-            <h2 className="text-xl font-semibold mb-3">
+            <h2 className="text-xl font-semibold mb-3 text-center">
               Questions and Answers
             </h2>
             <div className="space-y-4">
               {quizResult?.questions.map((question) => (
-                <div key={question.id}>
-                  <p>Question: {question.questionText}</p>
-                  <p>Correct Answer: {question.correctAnswer}</p>
+                <div
+                  key={question.id}
+                  className="m-3 p-3 md:m-6 md:p-6 bg-neutral"
+                >
+                  <p className="w-full flex justify-between">
+                    <span>Question: {question.questionText}</span>
+                    <span
+                      className={`text-right ${
+                        question.QuizResult.isCorrect
+                          ? "text-success"
+                          : "text-error"
+                      }`}
+                    >
+                      {question?.points}
+                    </span>
+                  </p>
                   <p>Explanation: {question.explanation}</p>
-                  {question.QuizResult?.userAnswer ? (
-                    <p>User Answer: {question.QuizResult.userAnswer}</p>
-                  ) : (
-                    <p>Did not attempt</p>
-                  )}
-                  <p>
-                    Status:{" "}
-                    {question.QuizResult.isCorrect ? "Correct" : "Incorrect"}
+                  <p className="w-full flex gap-5 items-center">
+                    <span>
+                      Correct Answer:{" "}
+                      {question.questionType === "TRUE_FALSE"
+                        ? question.correctAnswer === "T"
+                          ? "True"
+                          : "False"
+                        : question.correctAnswer}
+                    </span>
+                    {question.QuizResult?.userAnswer ? (
+                      <span>
+                        User Answer:&nbsp;
+                        {question.questionType === "TRUE_FALSE"
+                          ? question.QuizResult.userAnswer === "T"
+                            ? "True"
+                            : "False"
+                          : question.QuizResult.userAnswer}
+                      </span>
+                    ) : (
+                      <span>Did not attempt</span>
+                    )}
+                    <span>
+                      {question.QuizResult?.isCorrect
+                        ? <FaCheck className="text-success" />
+                        : <FaTimes className="text-error" />}
+                    </span>
                   </p>
                 </div>
               ))}

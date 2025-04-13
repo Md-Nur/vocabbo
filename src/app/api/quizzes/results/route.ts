@@ -2,11 +2,20 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { useAppSelector } from "@/store/hooks";
 
-export async function GET(req: Request) {
-  const user = useAppSelector((state) => state.user.user);
-  const quizResults = await prisma.quizResult.findMany({
+export async function POST(req: Request) {
+  const { userId } = await req.json();
+  const quizResults = await prisma.quizAttempt.findMany({
     where: {
-      userId: user?.id,
+      userId,
+      status: {
+        not: "IN_PROGRESS",
+      },
+    },
+    include: {
+      quiz: true,
+    },
+    orderBy: {
+      startedAt: "desc",
     },
   });
   return NextResponse.json(quizResults);
