@@ -5,6 +5,7 @@ import UserProvider from "./User";
 import { ReduxProvider } from "./ReduxProvider";
 import TanstackProvider from "./Tanstack";
 import Navbar from "@/components/Nav/Navbar";
+import Footer from "@/components/Footer";
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
@@ -14,6 +15,7 @@ export function Providers({ children }: { children: ReactNode }) {
           <Navbar>
             {children}
             <Toaster />
+            <Footer />
           </Navbar>
         </UserProvider>
       </TanstackProvider>

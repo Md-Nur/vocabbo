@@ -1,2 +1,151 @@
 @import "tailwindcss";
 @plugin "daisyui";
+@plugin "daisyui/theme" {
+  name: "vocabbo-light";
+  /* default: true; set as default */
+  prefersdark: false; /* set as default dark mode (prefers-color-scheme:dark) */
+  color-scheme: light; /* color of browser-provided UI */
+  --color-base-100: #ffffff;         /* White background */
+  --color-base-200: #f5f7fa;         /* Very light cool off-white */
+  --color-base-300: #e8eef3;         /* Light cool gray */
+  --color-base-content: #1a202c;     /* Dark Gray/Near Black text */
+
+  /* Primary Brand/Action Colors: Vibrant Blue */
+  --color-primary: #1e88e5;          /* Bright, engaging Blue */
+  --color-primary-content: #ffffff;  /* White text on primary */
+
+  /* Secondary Accent/Action Colors: Lively Cyan */
+  --color-secondary: #00bcd4;        /* Bright Cyan */
+  --color-secondary-content: #004d5a;/* Dark Cyan text for contrast */
+
+  /* Accent Color: Vivid Pink */
+  --color-accent: #e91e63;           /* Vivid Pink/Magenta */
+  --color-accent-content: #ffffff;   /* White text on accent */
+
+  /* Neutral Colors: Cool grays */
+  --color-neutral: #d8dde3;          /* Medium light cool gray */
+  --color-neutral-content: #718096;  /* Medium cool gray text */
+
+  /* Semantic Colors: Bright & Clear */
+  --color-info: #03a9f4;             /* Bright Light Blue */
+  --color-info-content: #ffffff;     /* White text on info */
+  --color-success: #4caf50;          /* Bright Green */
+  --color-success-content: #ffffff;  /* White text on success */
+  --color-warning: #ffc107;          /* Bright Amber/Yellow */
+  --color-warning-content: #1a202c;  /* Dark text on warning */
+  --color-error: #f44336;            /* Bright Red */
+  --color-error-content: #ffffff;    /* White text on error */
+
+  /* border radius */
+  --radius-selector: 1rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.5rem;
+
+  /* base sizes */
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+
+  /* border size */
+  --border: 1px;
+
+  /* effects */
+  --depth: 1;
+  --noise: 0;
+}
+@plugin "daisyui/theme" {
+  name: "vocabbo-dark";
+  /* default: false; set as default */
+  prefersdark: true; /* set as default dark mode (prefers-color-scheme:dark) */
+  color-scheme: dark; /* color of browser-provided UI */
+  /* Base Colors: Deep cool dark tones */
+  --color-base-100: #1a202c;         /* Deep Blue/Gray background */
+  --color-base-200: #2d3748;         /* Slightly lighter dark blue/gray */
+  --color-base-300: #4a5568;         /* Medium dark blue/gray */
+  --color-base-content: #e2e8f0;     /* Light cool gray text */
+
+  /* Primary Brand/Action Colors: Lighter vibrant blue */
+  --color-primary: #64b5f6;          /* Lighter Bright Blue */
+  --color-primary-content: #1a202c;  /* Dark text on light blue */
+
+  /* Secondary Accent/Action Colors: Lighter cyan */
+  --color-secondary: #4dd0e1;        /* Lighter Bright Cyan */
+  --color-secondary-content: #004d5a;/* Dark Cyan text */
+
+  /* Accent Color: Lighter vivid pink */
+  --color-accent: #f06292;           /* Lighter Pink/Magenta */
+  --color-accent-content: #1a202c;   /* Dark text on light pink */
+
+  /* Neutral Colors: Mid-tone cool grays */
+  --color-neutral: #718096;          /* Medium cool gray */
+  --color-neutral-content: #a0aec0;  /* Lighter cool gray text */
+
+  /* Semantic Colors: Lighter, but still saturated */
+  --color-info: #81d4fa;             /* Lighter Bright Light Blue */
+  --color-info-content: #1a202c;     /* Dark text on info */
+  --color-success: #81c784;          /* Lighter Bright Green */
+  --color-success-content: #1a202c;  /* Dark text on success */
+  --color-warning: #ffd54f;          /* Lighter Bright Yellow */
+  --color-warning-content: #1a202c;  /* Dark text on warning */
+  --color-error: #ef9a9a;            /* Lighter Bright Red */
+  --color-error-content: #1a202c;    /* Dark text on error */
+
+  /* border radius */
+  --radius-selector: 1rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.5rem;
+
+  /* base sizes */
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+
+  /* border size */
+  --border: 1px;
+
+  /* effects */
+  --depth: 1;
+  --noise: 0;
+}
+
+/*
+I am creating a vocabulary website where a user can learn, take quizzes, and see the leaderboard among the many languages they choose to learn. I want to make the UI very clean and user-friendly, like Google's websites. Now give me color suggestions for both light and dark UI theme for these variables
+
+--color-base-100;
+
+--color-base-200;
+
+--color-base-300;
+
+--color-base-content;
+
+--color-primary;
+
+--color-primary-content;
+
+--color-secondary;
+
+--color-secondary-content;
+
+--color-accent;
+
+--color-accent-content;
+
+--color-neutral;
+
+--color-neutral-content;
+
+--color-info;
+
+--color-info-content;
+
+--color-success;
+
+--color-success-content;
+
+--color-warning;
+
+--color-warning-content;
+
+--color-error;
+
+--color-error-content;
+*/

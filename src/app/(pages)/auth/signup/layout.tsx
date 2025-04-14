@@ -37,7 +37,7 @@ export default function SignUpLayout({ children }: { children: ReactNode }) {
           </div>
           <div className="card bg-base-200 w-full max-w-sm shrink-0 shadow-2xl">
             <div className="card-body">{children}</div>
-            <Link href="/auth/login" className="link link-hover link-secondary px-6">
+            <Link href="/auth/login" className="link link-hover link-secondary px-6 mb-5">
               Already have an account? Login
             </Link>
           </div>

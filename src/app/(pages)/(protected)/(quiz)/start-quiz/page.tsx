@@ -9,12 +9,15 @@ import { FaCheck, FaTimes } from "react-icons/fa";
 import Timer from "@/components/Timer";
 import DurationModal from "@/components/DurationModal";
 import { useRef } from "react";
+import { toast } from "sonner";
+import { getPreviousRoute } from "@/lib/utils";
 
 const StartQuiz = () => {
   const user = useAppSelector((state) => state.user.user);
   const router = useRouter();
   const [duration, setDuration] = useState<number | null>(null);
   const modalRef = useRef<HTMLDialogElement>(null);
+  const [isPageLoading, setIsPageLoading] = useState(false);
 
   const {
     mutate: startQuiz,
@@ -62,7 +65,6 @@ const StartQuiz = () => {
   const {
     mutate: submitQuiz,
     isPending: isSubmitQuizLoading,
-
     isError: isSubmitQuizError,
     error: submitQuizError,
   } = useMutation({
@@ -73,11 +75,16 @@ const StartQuiz = () => {
     onSuccess: (data) => {
       // Store the data in localStorage
       localStorage.setItem(`quiz_${data.id}`, JSON.stringify(data));
-      // Navigate to results page
+      // Set loading state before navigation
+      setIsPageLoading(true);
       router.push(`/quiz-results/${data.id}`);
     },
     onError: (error) => {
+      toast.error(
+        isAxiosError(error) ? error.response?.data.error : error.message
+      );
       console.log(error);
+      setIsPageLoading(false);
     },
   });
 
@@ -88,12 +95,21 @@ const StartQuiz = () => {
     },
     onSuccess: (data) => {
       console.log(data);
+      router.push(getPreviousRoute());
     },
     onError: (error) => {
       console.log(error);
+      toast.error(
+        isAxiosError(error) ? error.response?.data.error : error.message
+      );
     },
   });
   const handleTimeUp = () => {
+    submitQuiz();
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
     submitQuiz();
   };
 
@@ -101,7 +117,8 @@ const StartQuiz = () => {
     isQuizLoading ||
     isQuizAvailableLoading ||
     isSubmitQuizLoading ||
-    isAbandonQuizLoading
+    isAbandonQuizLoading ||
+    isPageLoading
   ) {
     return <Loading />;
   } else if (isQuizError || isQuizAvailableError || isSubmitQuizError) {
@@ -131,13 +148,11 @@ const StartQuiz = () => {
       {quiz?.quiz.duration && (
         <Timer initialTime={quiz.quiz.duration * 60} onTimeUp={handleTimeUp} />
       )}
-      <h1 className="text-2xl font-bold my-10">
-        Quiz &nbsp;
-        <span className="text-sm text-gray-500">
-          ({quiz?.quizQuestions.length} questions)
-        </span>
-      </h1>
-      <div className="w-full">
+      <h1 className="text-3xl md:text-5xl font-bold mt-10">Quiz</h1>
+      <span className="text-sm mb-10 text-info opacity-65">
+        ({quiz?.quizQuestions.length} questions)
+      </span>
+      <form onSubmit={handleSubmit} className="w-full">
         {quiz?.quizQuestions.map(
           (
             question: {
@@ -151,7 +166,7 @@ const StartQuiz = () => {
           ) => (
             <div
               key={question.id}
-              className="my-4 rounded-lg p-4 bg-neutral text-neutral-content"
+              className="my-4 rounded-lg p-4 bg-neutral text-neutral-content mx-1"
             >
               <h2 className="flex items-center gap-2 justify-between">
                 <span className="">
@@ -197,7 +212,7 @@ const StartQuiz = () => {
                       <input
                         type="radio"
                         name={question.id}
-                        value={0}
+                        value="F"
                         onChange={(e) => {
                           quiz.quizQuestions[i].answer = e.target.value;
                         }}
@@ -222,16 +237,8 @@ const StartQuiz = () => {
         )}
         <div className="flex justify-around mb-10">
           <button
-            className="btn btn-primary"
-            onClick={(e) => {
-              e.preventDefault();
-              submitQuiz();
-            }}
-          >
-            Submit
-          </button>
-          <button
-            className="btn btn-secondary"
+            className="btn btn-warning"
+            type="button"
             onClick={(e) => {
               e.preventDefault();
               abandonQuiz();
@@ -239,8 +246,11 @@ const StartQuiz = () => {
           >
             Abandon
           </button>
+          <button className="btn btn-info" type="submit">
+            Submit
+          </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

@@ -33,6 +33,7 @@ const NavRoutes = () => {
         />
       )}
 
+      <NavLink name="leaderboard" route="/leaderboard" />
       {user?.id ? (
         <>
           <NavLink name="Dashboard" route="/dashboard" />

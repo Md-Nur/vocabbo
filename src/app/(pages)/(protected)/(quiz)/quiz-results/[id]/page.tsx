@@ -6,9 +6,10 @@ import axios, { isAxiosError } from "axios";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaCheck, FaTimes } from "react-icons/fa";
+import { IoCheckmark, IoWarning } from "react-icons/io5";
 
 interface QuizResultDetails extends QuizQuestion {
-  QuizResult: QuizResult;
+  QuizResult: QuizResult[];
 }
 interface QuizResultDetails extends Quiz {
   questions: QuizResultDetails[];
@@ -65,7 +66,7 @@ const SingleQuizResult = () => {
   }
   return (
     <div className="w-full max-w-5xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4 text-center">Quiz Result</h1>
+      <h1 className="text-3xl font-bold mb-4 text-center my-10">Quiz Result</h1>
       <div className="space-y-4">
         <div className="space-y-2">
           <div className="flex gap-5">
@@ -75,11 +76,13 @@ const SingleQuizResult = () => {
           <p>
             Completed At:&nbsp;
             {quizResult?.attempts[0]?.completedAt
-              ? new Date(quizResult.attempts[0].completedAt).toLocaleString()
+              ? new Date(quizResult.attempts[0].completedAt).toLocaleString(
+                  "en-IN"
+                )
               : "N/A"}
           </p>
           <p>
-            Time taken:&nbsp;
+            Time:&nbsp;
             {quizResult?.duration ? `${quizResult.duration} minutes` : "N/A"}
           </p>
         </div>
@@ -93,13 +96,13 @@ const SingleQuizResult = () => {
               {quizResult?.questions.map((question) => (
                 <div
                   key={question.id}
-                  className="m-3 p-3 md:m-6 md:p-6 bg-neutral"
+                  className="m-3 p-3 md:m-6 md:p-6 bg-neutral rounded-xl space-y-5"
                 >
                   <p className="w-full flex justify-between">
                     <span>Question: {question.questionText}</span>
                     <span
                       className={`text-right ${
-                        question.QuizResult.isCorrect
+                        question.QuizResult[0].isCorrect
                           ? "text-success"
                           : "text-error"
                       }`}
@@ -108,31 +111,42 @@ const SingleQuizResult = () => {
                     </span>
                   </p>
                   <p>Explanation: {question.explanation}</p>
-                  <p className="w-full flex gap-5 items-center">
+                  <p className="w-full flex gap-5 items-center justify-between">
                     <span>
-                      Correct Answer:{" "}
+                      Correct Answer:&nbsp;
                       {question.questionType === "TRUE_FALSE"
                         ? question.correctAnswer === "T"
                           ? "True"
                           : "False"
                         : question.correctAnswer}
                     </span>
-                    {question.QuizResult?.userAnswer ? (
+                    {question.QuizResult[0]?.userAnswer ? (
                       <span>
                         User Answer:&nbsp;
                         {question.questionType === "TRUE_FALSE"
-                          ? question.QuizResult.userAnswer === "T"
+                          ? question.QuizResult[0].userAnswer === "T"
                             ? "True"
                             : "False"
-                          : question.QuizResult.userAnswer}
+                          : question.QuizResult[0].userAnswer}
                       </span>
-                    ) : (
-                      <span>Did not attempt</span>
-                    )}
+                    ) : null}
                     <span>
-                      {question.QuizResult?.isCorrect
-                        ? <FaCheck className="text-success" />
-                        : <FaTimes className="text-error" />}
+                      {question.QuizResult[0]?.isCorrect ? (
+                        <span className="flex items-center gap-2 badge text-green-900 bg-green-200 border-none">
+                          Correct
+                          <FaCheck />
+                        </span>
+                      ) : question.QuizResult[0]?.userAnswer ? (
+                        <span className="flex items-center gap-2 badge text-red-900 bg-red-200 border-none">
+                          Incorrect
+                          <FaTimes />
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-2 badge bg-yellow-300 text-yellow-900 border-none">
+                          Did not attempt
+                          <IoWarning />
+                        </span>
+                      )}
                     </span>
                   </p>
                 </div>

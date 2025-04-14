@@ -46,7 +46,7 @@ export async function getGroqWords(
 }
 export async function getGroqInterests(interestes: string) {
   const result = await generateObject({
-    model: groq("gemma2-9b-it"),
+    model: groq("llama-3.3-70b-versatile"),
     system: "You are a strict JSON generator.",
     prompt: `Extract interests from the user's input. The user is interested in ${interestes}.`,
     schema: z.object({
@@ -92,7 +92,7 @@ export async function getGroqQuiz(
   8. True/False questions solutions must be in T for true and F for false
   9. This test focuses on vocabulary practice.
 
-  Generate exactly ${Math.floor(quizDuration * 1.5)} questions in JSON format. 
+  Generate exactly ${Math.ceil(quizDuration * 1.5)} questions in JSON format. 
   `;
   try {
     const result = await generateObject({

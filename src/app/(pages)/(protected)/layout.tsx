@@ -29,7 +29,11 @@ const ProtectedLayout = ({ children }: { children: ReactNode }) => {
   }
 
   if (user?.id) {
-    return <>{children}</>;
+    return (
+      <main className="max-w-6xl mx-auto flex flex-col justify-center items-center">
+        {children}
+      </main>
+    );
   }
 };
 

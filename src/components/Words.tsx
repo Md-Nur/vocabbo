@@ -1,5 +1,6 @@
 "use client";
 import { Word } from "@prisma/client";
+import Image from "next/image";
 import Link from "next/link";
 
 const Words = ({ words }: { words: Word[] }) => {
@@ -9,11 +10,11 @@ const Words = ({ words }: { words: Word[] }) => {
         <Link
           href={`/word/${word?.id}`}
           key={word?.id}
-          className="card bg-base-200 w-80 sm:w-96 shadow-sm"
+          className="card bg-base-200 sm:w-80 w-full shadow-sm"
         >
           {word?.imageUrl && (
             <figure>
-              <img
+              <Image
                 src={word?.imageUrl || "abc.png"}
                 alt={word.word}
                 width={400}
@@ -26,7 +27,7 @@ const Words = ({ words }: { words: Word[] }) => {
             <h2 className="card-title">{word.word}</h2>
             <p>{word.meaning}</p>
             <div className="card-actions justify-end">
-              <div className="badge badge-neutral">{word.category}</div>
+              <div className="badge badge-neutral text-black">{word.category}</div>
             </div>
           </div>
         </Link>

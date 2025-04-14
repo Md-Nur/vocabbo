@@ -107,7 +107,7 @@ model QuizQuestion {
   explanation   String?
   points        Int          @default(1)
   createdAt     DateTime     @default(now())
-  QuizResult    QuizResult?
+  QuizResult    QuizResult[]
 }
 
 model QuizAttempt {
@@ -128,7 +128,7 @@ model QuizResult {
   id         String       @id @default(uuid())
   attemptId  String
   attempt    QuizAttempt  @relation(fields: [attemptId], references: [id])
-  questionId String       @unique
+  questionId String       
   question   QuizQuestion @relation(fields: [questionId], references: [id])
   userId     String
   user       User         @relation(fields: [userId], references: [id])
@@ -138,11 +138,11 @@ model QuizResult {
 
 model Leaderboard {
   id         String @id @default(uuid())
-  userId     String @unique @map("user_id")
   totalScore Int    @default(0) @map("total_score")
 
   // Relationships
-  user User @relation(fields: [userId], references: [id])
+  userId String @unique @map("user_id")
+  user   User   @relation(fields: [userId], references: [id])
 
   @@map("leaderboard")
 }
