@@ -105,7 +105,7 @@ const SingleWord = ({ params }: { params: Promise<{ id: string }> }) => {
           {word?.translateWord[0] && (
             <>
               <hr className="my-4" />
-              <div className="flex gap-2 items-center">
+              <div className="flex gap-2 items-center flex-wrap">
                 <h1 className="text-3xl font-bold">
                   {word.translateWord[0]?.translatedWord}
                 </h1>
