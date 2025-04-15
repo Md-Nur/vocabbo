@@ -11,10 +11,10 @@ const Input = ({ label, errors, ...props }: InputProps) => {
     <div className="form-control w-full">
       {label && (
         <label className="label">
-          <span className="label-text">{label}</span>
+          <span className="label-text capitalize">{label}</span>
         </label>
       )}
-      <input className="input input-bordered w-full" {...props} />
+      <input className="input input-bordered w-full input-accent" {...props} />
       {errors?.message && (
         <label className="label">
           <span className="label-text-alt text-error">{errors.message}</span>

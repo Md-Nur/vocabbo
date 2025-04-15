@@ -60,7 +60,7 @@ const NewWords = () => {
   });
 
   const learnWords = useQuery({
-    queryKey: ["learn-words"],
+    queryKey: ["learn-words", user],
     queryFn: async () => {
       const response = await axios.post("/api/words/learn", {
         user,
@@ -70,7 +70,6 @@ const NewWords = () => {
     },
   });
 
-  console.log(learnWords.data);
   useEffect(() => {
     if (learnWords.isLoading) {
       setIsLoading(true);

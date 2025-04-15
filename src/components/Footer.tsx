@@ -11,17 +11,23 @@ const Footer = () => {
         <Link href="/" className="link link-hover">
           Contact
         </Link>
+        <Link href="/" className="link link-hover">
+          Terms
+        </Link>
+        <Link href="/" className="link link-hover">
+          Privacy
+        </Link>
       </nav>
       <nav>
         <div className="grid grid-flow-col gap-4">
           <a>
-            <FaFacebook />
+            <FaFacebook className="w-6 h-6" />
           </a>
           <a>
-            <FaLinkedin />
+            <FaLinkedin className="w-6 h-6" />
           </a>
           <a>
-            <FaTwitter />
+            <FaTwitter className="w-6 h-6" />
           </a>
         </div>
       </nav>

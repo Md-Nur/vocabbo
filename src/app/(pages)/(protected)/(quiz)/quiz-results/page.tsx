@@ -47,7 +47,7 @@ const QuizResults = () => {
       <div className="overflow-x-auto max-w-5xl mx-auto">
         <table className="table">
           {/* head */}
-          <thead>
+          <thead className="bg-base-200">
             <tr>
               <th>Start At</th>
               <th>Completed At</th>

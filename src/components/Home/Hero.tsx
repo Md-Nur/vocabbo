@@ -2,11 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 
 const Hero = () => {
+  
   return (
     <>
-      
-      <div className="h-[65] fixed top-0 w-full bg-base-200"> </div>
-      <div className="hero w-full bg-base-200">
+      <div className="h-[65] fixed top-0 w-full bg-gradient-to-r from-base-200 to-base-300"></div>
+      <div className="hero w-full bg-gradient-to-r from-base-200 to-base-300 py-20">
         <div className="hero-content flex-col lg:flex-row-reverse max-w-6xl mx-auto">
           <Image
             alt="hero"
@@ -15,15 +15,27 @@ const Hero = () => {
             src="/hero.png"
             className="max-w-sm"
           />
-          <div>
-            <h1 className="text-5xl font-bold">Vocabbo</h1>
+          <div className="">
+            <h1 className="text-5xl font-bold leading-16">
+              Learn{" "}
+              <span className="from-primary to-secondary text-transparent bg-clip-text bg-gradient-to-r">
+                words,{" "}
+              </span>
+              play{" "}
+              <span className="from-secondary to-accent text-transparent bg-clip-text bg-gradient-to-r">
+                quizzes,{" "}
+              </span>
+              and grow your{" "}
+              <span className="from-primary to-secondary text-transparent bg-clip-text bg-gradient-to-r">
+                skills!
+              </span>
+              📚
+            </h1>
             <p className="py-6">
-              Vocabbo is a vocabulary learning app that helps you learn and
-              memorize new words quickly and effectively. With its user-friendly
-              interface and personalized learning plans, Vocabbo makes it easy
-              to expand your vocabulary and improve your language skills.
+              Explore new words, test yourself with quizzes, and see how you
+              rank against others. Learning has never been this fun!
             </p>
-            <Link href="/auth/signup" className="btn btn-primary mr-3">
+            <Link href="/auth/signup/1" className="btn btn-primary mr-3">
               Join
             </Link>
             <Link href="/auth/login" className="btn btn-primary ml-3">

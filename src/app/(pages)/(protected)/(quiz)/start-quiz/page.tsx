@@ -54,11 +54,14 @@ const StartQuiz = () => {
   });
 
   useEffect(() => {
-    if (isQuizAvailableSuccess) {
+    if (isQuizAvailableSuccess && isQuizAvailable.isAvailable) {
       modalRef.current?.showModal();
       if (duration) {
         startQuiz();
       }
+    } else if (isQuizAvailable) {
+      toast.success("You have give today's quiz");
+      router.push(getPreviousRoute() || "/quiz-result");
     }
   }, [isQuizAvailableSuccess, duration]);
 
@@ -104,9 +107,6 @@ const StartQuiz = () => {
       );
     },
   });
-  const handleTimeUp = () => {
-    submitQuiz();
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -146,9 +146,9 @@ const StartQuiz = () => {
   return (
     <div className="flex flex-col items-center justify-center w-full max-w-4xl mx-auto">
       {quiz?.quiz.duration && (
-        <Timer initialTime={quiz.quiz.duration * 60} onTimeUp={handleTimeUp} />
+        <Timer initialTime={quiz.quiz.duration * 60} onTimeUp={submitQuiz} />
       )}
-      <h1 className="text-3xl md:text-5xl font-bold mt-10">Quiz</h1>
+      <h1 className="text-3xl md:text-5xl font-bold mt-10 items-start">Quiz</h1>
       <span className="text-sm mb-10 text-info opacity-65">
         ({quiz?.quizQuestions.length} questions)
       </span>
@@ -166,7 +166,7 @@ const StartQuiz = () => {
           ) => (
             <div
               key={question.id}
-              className="my-4 rounded-lg p-4 bg-neutral text-neutral-content mx-1"
+              className="my-4 rounded-lg p-4 bg-base-200 mx-1"
             >
               <h2 className="flex items-center gap-2 justify-between">
                 <span className="">
@@ -225,7 +225,7 @@ const StartQuiz = () => {
                 <input
                   type="text"
                   name={question.id}
-                  className="input input-bordered w-full max-w-xs m-2 text-neutral-content"
+                  className="input input-bordered w-full max-w-xs m-2"
                   placeholder="Enter your answer"
                   onChange={(e) => {
                     quiz.quizQuestions[i].answer = e.target.value;

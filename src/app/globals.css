@@ -5,36 +5,26 @@
   /* default: true; set as default */
   prefersdark: false; /* set as default dark mode (prefers-color-scheme:dark) */
   color-scheme: light; /* color of browser-provided UI */
-  --color-base-100: #ffffff;         /* White background */
-  --color-base-200: #f5f7fa;         /* Very light cool off-white */
-  --color-base-300: #e8eef3;         /* Light cool gray */
-  --color-base-content: #1a202c;     /* Dark Gray/Near Black text */
-
-  /* Primary Brand/Action Colors: Vibrant Blue */
-  --color-primary: #1e88e5;          /* Bright, engaging Blue */
-  --color-primary-content: #ffffff;  /* White text on primary */
-
-  /* Secondary Accent/Action Colors: Lively Cyan */
-  --color-secondary: #00bcd4;        /* Bright Cyan */
-  --color-secondary-content: #004d5a;/* Dark Cyan text for contrast */
-
-  /* Accent Color: Vivid Pink */
-  --color-accent: #e91e63;           /* Vivid Pink/Magenta */
-  --color-accent-content: #ffffff;   /* White text on accent */
-
-  /* Neutral Colors: Cool grays */
-  --color-neutral: #d8dde3;          /* Medium light cool gray */
-  --color-neutral-content: #718096;  /* Medium cool gray text */
-
-  /* Semantic Colors: Bright & Clear */
-  --color-info: #03a9f4;             /* Bright Light Blue */
-  --color-info-content: #ffffff;     /* White text on info */
-  --color-success: #4caf50;          /* Bright Green */
-  --color-success-content: #ffffff;  /* White text on success */
-  --color-warning: #ffc107;          /* Bright Amber/Yellow */
-  --color-warning-content: #1a202c;  /* Dark text on warning */
-  --color-error: #f44336;            /* Bright Red */
-  --color-error-content: #ffffff;    /* White text on error */
+  --color-base-100: #ffffff; /* Lightest background (cards, modals) */
+  --color-base-200: #f8f9fa; /* Slightly darker background */
+  --color-base-300: #e9ecef; /* Borders, subtle contrasts */
+  --color-base-content: #1a1a1a; /* High-contrast text (dark gray) */
+  --color-primary: #4285f4; /* Google Blue (buttons, CTAs) */
+  --color-primary-content: #ffffff; /* White text on primary */
+  --color-secondary: #34a853; /* Google Green (secondary actions) */
+  --color-secondary-content: #ffffff;
+  --color-accent: #fbbc05; /* Google Yellow (highlights) */
+  --color-accent-content: #1a1a1a; /* Dark text on yellow */
+  --color-neutral: #5f6368; /* Gray for disabled/neutral elements */
+  --color-neutral-content: #ffffff;
+  --color-info: #4285f4; /* Blue (info alerts) */
+  --color-info-content: #ffffff;
+  --color-success: #34a853; /* Green (success alerts) */
+  --color-success-content: #ffffff;
+  --color-warning: #fbbc05; /* Yellow (warnings) */
+  --color-warning-content: #1a1a1a;
+  --color-error: #ea4335; /* Google Red (errors) */
+  --color-error-content: #ffffff;
 
   /* border radius */
   --radius-selector: 1rem;
@@ -57,37 +47,26 @@
   /* default: false; set as default */
   prefersdark: true; /* set as default dark mode (prefers-color-scheme:dark) */
   color-scheme: dark; /* color of browser-provided UI */
-  /* Base Colors: Deep cool dark tones */
-  --color-base-100: #1a202c;         /* Deep Blue/Gray background */
-  --color-base-200: #2d3748;         /* Slightly lighter dark blue/gray */
-  --color-base-300: #4a5568;         /* Medium dark blue/gray */
-  --color-base-content: #e2e8f0;     /* Light cool gray text */
-
-  /* Primary Brand/Action Colors: Lighter vibrant blue */
-  --color-primary: #64b5f6;          /* Lighter Bright Blue */
-  --color-primary-content: #1a202c;  /* Dark text on light blue */
-
-  /* Secondary Accent/Action Colors: Lighter cyan */
-  --color-secondary: #4dd0e1;        /* Lighter Bright Cyan */
-  --color-secondary-content: #004d5a;/* Dark Cyan text */
-
-  /* Accent Color: Lighter vivid pink */
-  --color-accent: #f06292;           /* Lighter Pink/Magenta */
-  --color-accent-content: #1a202c;   /* Dark text on light pink */
-
-  /* Neutral Colors: Mid-tone cool grays */
-  --color-neutral: #718096;          /* Medium cool gray */
-  --color-neutral-content: #a0aec0;  /* Lighter cool gray text */
-
-  /* Semantic Colors: Lighter, but still saturated */
-  --color-info: #81d4fa;             /* Lighter Bright Light Blue */
-  --color-info-content: #1a202c;     /* Dark text on info */
-  --color-success: #81c784;          /* Lighter Bright Green */
-  --color-success-content: #1a202c;  /* Dark text on success */
-  --color-warning: #ffd54f;          /* Lighter Bright Yellow */
-  --color-warning-content: #1a202c;  /* Dark text on warning */
-  --color-error: #ef9a9a;            /* Lighter Bright Red */
-  --color-error-content: #1a202c;    /* Dark text on error */
+  --color-base-100: #1e1e1e; /* Dark background */
+  --color-base-200: #2d2d2d; /* Slightly lighter (cards) */
+  --color-base-300: #3d3d3d; /* Borders, dividers */
+  --color-base-content: #f0f0f0; /* Light text for readability */
+  --color-primary: #8ab4f8; /* Lighter Google Blue */
+  --color-primary-content: #1a1a1a; /* Dark text on light blue */
+  --color-secondary: #81c995; /* Softened Google Green */
+  --color-secondary-content: #1a1a1a;
+  --color-accent: #fdd663; /* Softened Google Yellow */
+  --color-accent-content: #1a1a1a;
+  --color-neutral: #9aa0a6; /* Gray (disabled states) */
+  --color-neutral-content: #1a1a1a;
+  --color-info: #8ab4f8; /* Light Blue */
+  --color-info-content: #1a1a1a;
+  --color-success: #81c995; /* Light Green */
+  --color-success-content: #1a1a1a;
+  --color-warning: #fdd663; /* Light Yellow */
+  --color-warning-content: #1a1a1a;
+  --color-error: #f28b82; /* Light Red */
+  --color-error-content: #1a1a1a;
 
   /* border radius */
   --radius-selector: 1rem;

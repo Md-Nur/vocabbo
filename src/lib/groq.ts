@@ -96,7 +96,7 @@ export async function getGroqQuiz(
   `;
   try {
     const result = await generateObject({
-      model: groq("deepseek-r1-distill-llama-70b"),
+      model: groq("llama-3.3-70b-versatile"),
       system: "You are a strict JSON generator.",
       prompt: prompt,
       schema: z.object({

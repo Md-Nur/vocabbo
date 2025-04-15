@@ -1,5 +1,6 @@
 "use client";
 import Loading from "@/components/Loading";
+import Title from "@/components/Title";
 import { Quiz, QuizAttempt, QuizQuestion, QuizResult } from "@prisma/client";
 import { useMutation } from "@tanstack/react-query";
 import axios, { isAxiosError } from "axios";
@@ -65,13 +66,13 @@ const SingleQuizResult = () => {
     );
   }
   return (
-    <div className="w-full max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold mb-4 text-center my-10">Quiz Result</h1>
+    <div className="w-full my-10">
+      <Title>Quiz Result</Title>
       <div className="space-y-4">
-        <div className="space-y-2">
+        <div className="space-y-2 flex flex-col justify-center items-center">
           <div className="flex gap-5">
-            <span>Score: {quizResult?.attempts[0]?.score}</span>
-            <span>Total Score: {quizResult?.attempts[0]?.totalScore}</span>
+            <span className="">Score: {quizResult?.attempts[0]?.score}</span>
+            <span className="">Total Score: {quizResult?.attempts[0]?.totalScore}</span>
           </div>
           <p>
             Completed At:&nbsp;
@@ -96,15 +97,17 @@ const SingleQuizResult = () => {
               {quizResult?.questions.map((question) => (
                 <div
                   key={question.id}
-                  className="m-3 p-3 md:m-6 md:p-6 bg-neutral rounded-xl space-y-5"
+                  className="m-3 p-3 md:m-6 md:p-6 bg-neutral text-neutral-content rounded-xl space-y-5"
                 >
                   <p className="w-full flex justify-between">
                     <span>Question: {question.questionText}</span>
                     <span
-                      className={`text-right ${
+                      className={`text-right btn btn-sm mx-2 border-none ${
                         question.QuizResult[0].isCorrect
-                          ? "text-success"
-                          : "text-error"
+                          ? "btn-success"
+                          : !question.QuizResult[0]?.userAnswer
+                          ? "btn-warning"
+                          : "btn-error"
                       }`}
                     >
                       {question?.points}
@@ -132,17 +135,17 @@ const SingleQuizResult = () => {
                     ) : null}
                     <span>
                       {question.QuizResult[0]?.isCorrect ? (
-                        <span className="flex items-center gap-2 badge text-green-900 bg-green-200 border-none">
+                        <span className="flex items-center gap-2 badge badge-success border-none">
                           Correct
                           <FaCheck />
                         </span>
                       ) : question.QuizResult[0]?.userAnswer ? (
-                        <span className="flex items-center gap-2 badge text-red-900 bg-red-200 border-none">
+                        <span className="flex items-center gap-2 badge badge-error border-none">
                           Incorrect
                           <FaTimes />
                         </span>
                       ) : (
-                        <span className="flex items-center gap-2 badge bg-yellow-300 text-yellow-900 border-none">
+                        <span className="flex items-center gap-2 badge badge-warning border-none">
                           Did not attempt
                           <IoWarning />
                         </span>

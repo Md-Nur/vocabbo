@@ -15,7 +15,7 @@ const Textarea = ({ label, errors, ...props }: TextareaProps) => {
           <span className="label-text">{label}</span>
         </label>
       )}
-      <textarea className="textarea textarea-bordered w-full" {...props} />
+      <textarea className="textarea textarea-bordered textarea-accent w-full" {...props} />
       {errors?.message && (
         <label className="label">
           <span className="label-text-alt text-error">{errors.message}</span>

@@ -1,5 +1,6 @@
 "use client";
 import Loading from "@/components/Loading";
+import Title from "@/components/Title";
 import { useAppSelector } from "@/store/hooks";
 import { User } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
@@ -34,8 +35,8 @@ const Leaderboard = () => {
   }
   console.log(leaderboard);
   return (
-    <div className="flex flex-col items-center justify-center">
-      <h1 className="text-2xl font-bold my-10">Leaderboard</h1>
+    <div className="flex flex-col items-center justify-center max-h-screen my-10">
+      <Title>Leaderboard</Title>
       <div className="overflow-x-auto">
         <table className="table">
           <thead>
@@ -61,7 +62,7 @@ const Leaderboard = () => {
                 <tr
                   key={user.id}
                   className={`${
-                    user.user.id === myUser?.id ? "bg-neutral" : ""
+                    user.user.id === myUser?.id ? "bg-neutral text-neutral-content" : ""
                   }`}
                 >
                   <th>{i + 1}</th>

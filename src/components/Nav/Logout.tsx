@@ -25,11 +25,11 @@ export default function Logout() {
   };
 
   return (
-    <button
+    <li
       onClick={handleLogout}
-      className="btn btn-outline btn-sm font-bold uppercase"
+      className="btn btn-sm font-bold uppercase"
     >
       Logout
-    </button>
+    </li>
   );
 }

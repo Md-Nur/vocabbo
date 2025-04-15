@@ -6,9 +6,16 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   label?: string;
   errors?: { message?: string };
   options: { label?: string; value: string }[];
+  defaultValue?: string;
 }
 
-const Select = ({ label, errors, options, ...props }: SelectProps) => {
+const Select = ({
+  label,
+  errors,
+  options,
+  defaultValue,
+  ...props
+}: SelectProps) => {
   return (
     <div className="form-control w-full">
       {label && (
@@ -16,8 +23,14 @@ const Select = ({ label, errors, options, ...props }: SelectProps) => {
           <span className="label-text">{label}</span>
         </label>
       )}
-      <select className="select select-bordered w-full" {...props}>
-        <option defaultValue={label}>Select an option</option>
+      <select
+        className="select select-bordered w-full select-accent"
+        defaultValue={defaultValue || ""}
+        {...props}
+      >
+        <option value="" disabled>
+          Select an option
+        </option>
         {options.map((option) => (
           <option
             className="capitalize"

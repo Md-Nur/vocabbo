@@ -4,13 +4,13 @@ import { useQuery } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import Words from "@/components/Words";
 import Loading from "@/components/Loading";
-import { useRouter } from "next/navigation";
-import { use } from "react";
+import { useParams, useRouter } from "next/navigation";
 import Pagination from "@/components/Pagination";
 import { toast } from "sonner";
 
-const MyWords = ({ params }: { params: Promise<{ page_no: number }> }) => {
-  const resolvedParams: { page_no: number } = use(params);
+const MyWords = () => {
+  const params = useParams();
+  const page_no = parseInt(params.page_no as string, 10) || 1;
   const user = useAppSelector((state) => state.user.user);
   const router = useRouter();
   const {
@@ -19,11 +19,9 @@ const MyWords = ({ params }: { params: Promise<{ page_no: number }> }) => {
     error,
     isError,
   } = useQuery({
-    queryKey: ["my-words", resolvedParams.page_no],
+    queryKey: ["my-words", page_no],
     queryFn: async () => {
-      const response = await axios.get(
-        `/api/user/${user?.id}?page=${resolvedParams.page_no}`
-      );
+      const response = await axios.get(`/api/user/${user?.id}?page=${page_no}`);
       return response.data;
     },
   });
@@ -42,10 +40,10 @@ const MyWords = ({ params }: { params: Promise<{ page_no: number }> }) => {
         </div>
       </div>
     );
-  } else if (resolvedParams.page_no > words.totalPages) {
+  } else if (page_no > words.totalPages) {
     toast.error("Page not found");
     router.push(`/my-words/${words.totalPages}`);
-  } else if (resolvedParams.page_no < 1) {
+  } else if (page_no < 1) {
     toast.error("Page not found");
     router.push(`/my-words/1`);
   }
@@ -58,7 +56,7 @@ const MyWords = ({ params }: { params: Promise<{ page_no: number }> }) => {
       <Words words={words.words} />
       <Pagination
         totalPages={words.totalPages}
-        pageNo={resolvedParams.page_no}
+        pageNo={page_no}
         path="/my-words"
       />
     </div>

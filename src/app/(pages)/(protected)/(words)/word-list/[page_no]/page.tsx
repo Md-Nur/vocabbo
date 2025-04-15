@@ -4,15 +4,15 @@ import { useQuery } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import Words from "@/components/Words";
 import Loading from "@/components/Loading";
-import { useRouter, useSearchParams } from "next/navigation";
-import { use } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Pagination from "@/components/Pagination";
 import { toast } from "sonner";
 import Search from "@/components/Search";
 import Filter from "@/components/Filter";
 
-const AllWords = ({ params }) => {
-  const resolvedParams: { page_no: number } = use(params);
+const AllWords = () => {
+  const params = useParams();
+  const page_no = parseInt(params.page_no as string, 10) || 1;
   const searchParams = useSearchParams();
   const search =
     searchParams.get("search")?.toLowerCase().trim().replace(/ /g, "-") || "";
@@ -25,10 +25,10 @@ const AllWords = ({ params }) => {
     error,
     isError,
   } = useQuery({
-    queryKey: ["word-list", resolvedParams.page_no, search, filter],
+    queryKey: ["word-list", page_no, search, filter],
     queryFn: async () => {
       const response = await axios.get(
-        `/api/words?page=${resolvedParams.page_no}&search=${search}&filter=${filter}`
+        `/api/words?page=${page_no}&search=${search}&filter=${filter}`
       );
       return response.data;
     },
@@ -49,10 +49,10 @@ const AllWords = ({ params }) => {
         </div>
       </div>
     );
-  } else if (resolvedParams.page_no > words.totalPages) {
+  } else if (page_no > words.totalPages) {
     toast.error("Page not found");
     router.push(`/word-list/${words.totalPages}`);
-  } else if (resolvedParams.page_no < 1) {
+  } else if (page_no < 1) {
     toast.error("Page not found");
     router.push(`/word-list/1`);
   }
@@ -66,7 +66,7 @@ const AllWords = ({ params }) => {
       <Words words={words.words} />
       <Pagination
         totalPages={words.totalPages}
-        pageNo={resolvedParams.page_no}
+        pageNo={page_no}
         path="/word-list"
       />
     </div>
