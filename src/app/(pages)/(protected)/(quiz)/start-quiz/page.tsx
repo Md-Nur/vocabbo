@@ -61,7 +61,11 @@ const StartQuiz = () => {
       }
     } else if (isQuizAvailable) {
       toast.success("You have give today's quiz");
-      router.push(getPreviousRoute() || "/quiz-result");
+      let prevRoute = getPreviousRoute();
+      if (prevRoute === "/start-quiz" || !prevRoute) {
+        prevRoute = "/quiz-results";
+      }
+      router.push(prevRoute);
     }
   }, [isQuizAvailableSuccess, duration]);
 
