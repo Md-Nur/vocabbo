@@ -2,11 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 const Hero = () => {
-  
   return (
     <>
       <div className="h-[65] fixed top-0 w-full bg-gradient-to-r from-base-200 to-base-300"></div>
-      <div className="hero w-full bg-gradient-to-r from-base-200 to-base-300 py-20">
+      <div className="hero w-full bg-gradient-to-r from-base-200 to-base-300 md:py-20 py-5">
         <div className="hero-content flex-col lg:flex-row-reverse max-w-6xl mx-auto">
           <Image
             alt="hero"
