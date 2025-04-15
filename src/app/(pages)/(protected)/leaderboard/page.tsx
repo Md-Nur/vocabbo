@@ -37,7 +37,7 @@ const Leaderboard = () => {
   return (
     <div className="flex flex-col items-center justify-center max-h-screen my-10">
       <Title>Leaderboard</Title>
-      <div className="overflow-x-auto w-screen">
+      <div className="overflow-x-auto w-screen max-w-6xl mx-auto">
         <table className="table">
           <thead>
             <tr>

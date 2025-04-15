@@ -61,11 +61,11 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="card mb-20 w-full max-w-sm shrink-0 shadow-2xl">
-      <div className="flex items-center gap-10 w-full justify-center">
+    <div className="card mb-20 w-full">
+      <div className="flex items-center gap-5 w-full justify-center">
         <Title>Dashboard</Title>
         {!enableEdit && (
-          <div className="dropdown dropdown-right">
+          <div className="dropdown dropdown-end lg:dropdown-right">
             <div tabIndex={0} role="button" className="btn m-1">
               <BsThreeDotsVertical className="text-xl" />
             </div>

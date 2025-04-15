@@ -44,7 +44,7 @@ const QuizResults = () => {
       <h1 className="text-3xl font-bold mb-4 text-center my-10 w-full">
         Quiz Results
       </h1>
-      <div className="overflow-x-auto w-screen">
+      <div className="overflow-x-auto w-screen max-w-6xl mx-auto">
         <table className="table">
           {/* head */}
           <thead className="bg-base-200">
