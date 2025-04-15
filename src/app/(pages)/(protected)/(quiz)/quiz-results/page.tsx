@@ -41,10 +41,10 @@ const QuizResults = () => {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-4 text-center my-10">
+      <h1 className="text-3xl font-bold mb-4 text-center my-10 w-full">
         Quiz Results
       </h1>
-      <div className="overflow-x-auto max-w-5xl mx-auto">
+      <div className="overflow-x-auto w-screen">
         <table className="table">
           {/* head */}
           <thead className="bg-base-200">
