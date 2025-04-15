@@ -50,7 +50,7 @@ const DurationModal = ({
               className="btn btn-error join-item"
               onClick={() => {
                 modalRef.current?.close();
-                router.push(getPreviousRoute());
+                router.push("/quiz-results");
               }}
             >
               Cancel

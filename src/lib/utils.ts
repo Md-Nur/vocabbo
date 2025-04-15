@@ -1,10 +1,5 @@
 export const storePreviousRoute = (path: string) => {
-  if (
-    path !== "/auth/login" &&
-    path !== "/auth/signup" &&
-    path !== "/start-quiz" &&
-    path !== "/new-words"
-  ) {
+  if (path !== "/auth/login" && path !== "/auth/signup") {
     sessionStorage.setItem("previousRoute", path);
   }
 };
@@ -21,4 +16,3 @@ export const getPreviousRoute = () => {
 export const clearPreviousRoute = () => {
   sessionStorage.removeItem("previousRoute");
 };
-

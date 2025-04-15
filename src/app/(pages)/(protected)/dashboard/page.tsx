@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setUser } from "@/store/slices/userSlice";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -18,6 +19,7 @@ export default function Dashboard() {
   const { user } = useAppSelector((state) => state.user);
   const [enableEdit, setEnableEdit] = useState(false);
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const {
     register,
@@ -48,6 +50,7 @@ export default function Dashboard() {
       // Update user data in the store
 
       dispatch(setUser(data));
+      router.refresh();
     },
     onError: (error) => {
       toast.error("Failed to update profile. Please try again.");
