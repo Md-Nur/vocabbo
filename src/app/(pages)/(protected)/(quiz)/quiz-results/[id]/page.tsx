@@ -69,12 +69,12 @@ const SingleQuizResult = () => {
     <div className="w-full my-10">
       <Title>Quiz Result</Title>
       <div className="space-y-4">
-        <div className="space-y-2 flex flex-col justify-center items-center">
+        <div className="space-y-2 flex flex-col justify-center items-center p-1">
           <div className="flex gap-5">
             <span className="">Score: {quizResult?.attempts[0]?.score}</span>
             <span className="">Total Score: {quizResult?.attempts[0]?.totalScore}</span>
           </div>
-          <p>
+          <p className="text-center">
             Completed At:&nbsp;
             {quizResult?.attempts[0]?.completedAt
               ? new Date(quizResult.attempts[0].completedAt).toLocaleString(
@@ -114,7 +114,7 @@ const SingleQuizResult = () => {
                     </span>
                   </p>
                   <p>Explanation: {question.explanation}</p>
-                  <p className="w-full flex gap-5 items-center justify-between">
+                  <p className="w-full flex gap-5 items-center justify-between flex-wrap">
                     <span>
                       Correct Answer:&nbsp;
                       {question.questionType === "TRUE_FALSE"
