@@ -5,7 +5,7 @@ import { groq } from "@ai-sdk/groq";
 import { z } from "zod";
 
 const headers = {
-  "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY,
+  "x-rapidapi-key": process.env.RAPID_API_KEY,
   "x-rapidapi-host": "translateai.p.rapidapi.com",
 };
 const baseUrl = "https://translateai.p.rapidapi.com";
@@ -160,7 +160,7 @@ const detectLanguage = async (text: string) => {
   );
   return res.data?.lang;
 };
-export const getTranslateWords2 = async (
+export const getTranslateWords = async (
   content: {
     word: string;
     meaning: string;
@@ -203,7 +203,7 @@ export const getTranslateWords2 = async (
     category: res.data.translated_json.category,
   };
 };
-export const getTranslateWords = async (
+export const getTranslateWords2 = async (
   content: {
     word: string;
     meaning: string;

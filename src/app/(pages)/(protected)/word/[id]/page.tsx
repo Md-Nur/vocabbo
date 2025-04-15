@@ -60,7 +60,7 @@ const SingleWord = ({ params }: { params: Promise<{ id: string }> }) => {
     setIsBookmarked(res.data.isBookmarked);
   };
   return (
-    <div className="hero min-h-screen">
+    <div className="hero my-20 w-full">
       <div className="hero-content flex-col lg:flex-row">
         {word.imageUrl && (
           <Image
@@ -72,7 +72,7 @@ const SingleWord = ({ params }: { params: Promise<{ id: string }> }) => {
           />
         )}
         <div>
-          <div className="flex w-full gap-5 items-center">
+          <div className="flex w-full gap-5 items-center flex-wrap">
             <h1 className="text-3xl font-bold">{word?.word}</h1>
             {word?.translateWord[0] && (
               <p className="badge badge-primary">
@@ -101,7 +101,7 @@ const SingleWord = ({ params }: { params: Promise<{ id: string }> }) => {
               <li key={index}>{example}</li>
             ))}
           </ul>
-          <div className="flex gap-2 items-center"></div>
+          <div className="flex gap-2 items-center flex-wrap"></div>
           {word?.translateWord[0] && (
             <>
               <hr className="my-4" />
