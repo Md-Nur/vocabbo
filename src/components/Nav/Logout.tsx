@@ -10,6 +10,10 @@ export default function Logout() {
   const dispatch = useAppDispatch();
 
   const handleLogout = async () => {
+    const inputNav = document.getElementById("my-drawer-3");
+    if (inputNav) {
+      (inputNav as HTMLInputElement).checked = false;
+    }
     try {
       await axios.get("/api/auth/logout");
       dispatch(clearUser());
@@ -25,10 +29,7 @@ export default function Logout() {
   };
 
   return (
-    <li
-      onClick={handleLogout}
-      className="btn btn-sm font-bold uppercase"
-    >
+    <li onClick={handleLogout} className="btn btn-sm font-bold uppercase">
       Logout
     </li>
   );

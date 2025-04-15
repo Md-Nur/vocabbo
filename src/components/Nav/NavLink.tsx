@@ -7,15 +7,15 @@ const NavLink = ({ name, route }: { name: string; route?: string }) => {
   const to = route || `/${name}`;
   // console.log(pathname, to);
   const closeNav = () => {
-    const inputNav = document.getElementById("my-drawer-3");
     const dropdowns = document.getElementsByClassName("vocabbo-dropdown");
     // close dropdown if open
     for (let i = 0; i < dropdowns.length; i++) {
       (dropdowns[i] as HTMLDetailsElement).removeAttribute("open");
     }
     // close nav if open
-
+    
     // remove input checkbox
+    const inputNav = document.getElementById("my-drawer-3");
     if (inputNav) {
       (inputNav as HTMLInputElement).checked = false;
     }
