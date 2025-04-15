@@ -48,14 +48,14 @@ const WhyVocabbo = () => {
         <span className="text-primary">Vocabbo?</span>
       </Title>
       <p className="text-center max-w-xl mx-auto">
-        Because learning new words shouldn&apos;t feel like a chore — Vocabbo makes
-        it fun, competitive, and effective for learners of all levels.
+        Because learning new words shouldn&apos;t feel like a chore — Vocabbo
+        makes it fun, competitive, and effective for learners of all levels.
       </p>
       <div className="flex flex-col items-center">
         {keyFeatures.map((feature, index) => (
           <div
             key={index}
-            className={`flex flex-col bg-base-200 m-10 rounded-3xl p-10 gap-10 ${
+            className={`flex flex-col bg-base-200 m-3 md:m-10 rounded-3xl p-3 md:p-10 gap-10 ${
               index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
             } bg-base-300`}
           >
@@ -78,7 +78,7 @@ const WhyVocabbo = () => {
             <div className="w-full max-w-xl shadow">
               <div className="mockup-browser border border-base-300 w-full">
                 <div className="mockup-browser-toolbar">
-                  <div className="input">https://vacabboai.com</div>
+                  <div className="input">https://vacabbo.vercel.app</div>
                 </div>
                 <div className="grid place-content-center h-44">
                   <Image

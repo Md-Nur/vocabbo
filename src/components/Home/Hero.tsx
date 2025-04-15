@@ -13,7 +13,7 @@ const Hero = () => {
             width={1000}
             height={1000}
             src="/hero.png"
-            className="max-w-sm"
+            className="max-w-sm w-full"
           />
           <div className="">
             <h1 className="text-5xl font-bold leading-16">

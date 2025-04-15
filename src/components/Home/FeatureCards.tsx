@@ -3,7 +3,7 @@ import React from "react";
 
 const FeatureCards = () => {
   return (
-    <div className="flex max-w-6xl mx-auto justify-between m-10">
+    <div className="flex max-w-6xl mx-auto justify-around m-10 flex-wrap gap-2">
       <div className="card bg-base-100 dark:bg-base-200 shadow-sm w-72">
         <div className="card-body">
           <span className="text-2xl">🏆</span>
