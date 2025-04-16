@@ -36,15 +36,15 @@ export async function POST(req: Request) {
     );
 
     // Validate that we got exactly the requested number of words
-    if (result.length !== number_of_words) {
-      console.error(
-        `Expected ${number_of_words} words but got ${result.length}`
-      );
-      return NextResponse.json(
-        { error: `Failed to generate exactly ${number_of_words} words` },
-        { status: 500 }
-      );
-    }
+    // if (result.length !== number_of_words) {
+    //   console.error(
+    //     `Expected ${number_of_words} words but got ${result.length}`
+    //   );
+    //   return NextResponse.json(
+    //     { error: `Failed to generate exactly ${number_of_words} words` },
+    //     { status: 500 }
+    //   );
+    // }
 
     var newWords = result.map(
       (word: {
