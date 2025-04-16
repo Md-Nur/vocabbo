@@ -1,7 +1,9 @@
+import { useAppSelector } from "@/store/hooks";
 import Image from "next/image";
 import Link from "next/link";
 
 const Hero = () => {
+  const { user } = useAppSelector((state) => state.user);
   return (
     <>
       <div className="h-[65] fixed top-0 w-full bg-gradient-to-r from-base-200 to-base-300"></div>
@@ -34,12 +36,16 @@ const Hero = () => {
               Explore new words, test yourself with quizzes, and see how you
               rank against others. Learning has never been this fun!
             </p>
-            <Link href="/auth/signup/1" className="btn btn-primary mr-3">
-              Join
-            </Link>
-            <Link href="/auth/login" className="btn btn-primary ml-3">
-              Login
-            </Link>
+            {user && (
+              <>
+                <Link href="/auth/signup/1" className="btn btn-primary mr-3">
+                  Join
+                </Link>
+                <Link href="/auth/login" className="btn btn-primary ml-3">
+                  Login
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
