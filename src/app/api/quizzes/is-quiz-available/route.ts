@@ -17,7 +17,6 @@ export async function POST(req: Request) {
   if (!quiz) {
     return NextResponse.json({ isAvailable: true }, { status: 200 });
   }
-  console.log(quiz.createdAt.getTime() + 1000 * 60 * 60 * 24);
   const isAvailable =
     quiz.createdAt.getTime() + 1000 * 60 * 60 * 24 < Date.now();
   return NextResponse.json({ isAvailable }, { status: 200 });

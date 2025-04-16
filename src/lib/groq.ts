@@ -8,7 +8,6 @@ export async function getGroqWords(
   difficulty: string,
   learnedWords: string[]
 ) {
-  console.log(learnedWords);
   const prompt = `
       Generate EXACTLY ${number_of_words} words (no more, no less) with meaning and examples of sentences based on the user's interests and difficulty level among easy, medium, hard. Also give a prompt for that word that can be generate an image and avoid using words already learned by the user.
       Follow these rules:

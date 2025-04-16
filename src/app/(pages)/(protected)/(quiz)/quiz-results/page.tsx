@@ -37,7 +37,7 @@ const QuizResults = () => {
       </div>
     );
   }
-  console.log(quizResults);
+
 
   return (
     <div>

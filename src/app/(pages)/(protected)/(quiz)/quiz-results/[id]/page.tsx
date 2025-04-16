@@ -7,7 +7,8 @@ import axios, { isAxiosError } from "axios";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaCheck, FaTimes } from "react-icons/fa";
-import { IoCheckmark, IoWarning } from "react-icons/io5";
+import { IoWarning } from "react-icons/io5";
+import { toast } from "sonner";
 
 interface QuizResultDetails extends QuizQuestion {
   QuizResult: QuizResult[];
@@ -29,14 +30,15 @@ const SingleQuizResult = () => {
   } = useMutation({
     mutationFn: async () => {
       const response = await axios.get(`/api/quizzes/results/${id}`);
-      setQuizResult(response.data);
       return response.data;
     },
     onSuccess: (data) => {
-      console.log(data);
+      setQuizResult(data);
     },
     onError: (error) => {
-      console.log(error);
+      toast.error(
+        isAxiosError(error) ? error.response?.data.error : error.message
+      );
     },
   });
 
@@ -72,7 +74,9 @@ const SingleQuizResult = () => {
         <div className="space-y-2 flex flex-col justify-center items-center p-1">
           <div className="flex gap-5">
             <span className="">Score: {quizResult?.attempts[0]?.score}</span>
-            <span className="">Total Score: {quizResult?.attempts[0]?.totalScore}</span>
+            <span className="">
+              Total Score: {quizResult?.attempts[0]?.totalScore}
+            </span>
           </div>
           <p className="text-center">
             Completed At:&nbsp;

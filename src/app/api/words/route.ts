@@ -10,7 +10,6 @@ export async function GET(req: Request) {
   const pageNo = page ? parseInt(page) : 1;
   const filter =
     searchParams.get("filter")?.toLowerCase().trim().replace(/-/g, " ") || "";
-  console.log(filter);
   const limit = 12;
   const skip = (pageNo - 1) * limit;
 

@@ -1,6 +1,7 @@
 import axios from "axios";
 // import { blackforest } from "./blackforest";
 import { dalle } from "./dalle";
+import errorHandler from "./errorHandler";
 
 export async function imgbb(word: {
   word: string;
@@ -24,9 +25,11 @@ export async function imgbb(word: {
     }
     const formData = new FormData();
     formData.append("image", buffer);
-    const response = await axios.post(
-      `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
-      formData
+    const response = await errorHandler(
+      axios.post(
+        `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
+        formData
+      )
     );
     const imageUrl = response.data.data.display_url;
     return imageUrl;

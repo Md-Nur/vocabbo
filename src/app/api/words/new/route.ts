@@ -69,6 +69,7 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
+  
   try {
     const encoder = new TextEncoder();
     const strem = new ReadableStream({

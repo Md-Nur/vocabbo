@@ -37,7 +37,7 @@ const SingleWord = ({ params }: { params: Promise<{ id: string }> }) => {
 
   if (isLoading) return <Loading />;
   else if (isError) {
-    console.log(error);
+    console.error(error);
     return (
       <div className="text-error text-center text-3xl my-10">
         {error instanceof AxiosError && error?.response?.data?.error

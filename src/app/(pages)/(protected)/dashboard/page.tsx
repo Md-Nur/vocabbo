@@ -1,5 +1,6 @@
 "use client";
 import Button from "@/components/FormUI/button";
+import Checkbox from "@/components/FormUI/Checkbox";
 import Input from "@/components/FormUI/input";
 import Select from "@/components/FormUI/select";
 import Textarea from "@/components/FormUI/textarea";
@@ -33,11 +34,13 @@ export default function Dashboard() {
       learningLanguage: user?.learningLanguage || "",
       interests: user?.interests.join(", ") || "",
       difficulty: user?.difficulty || "",
+      isImgEnabled: user?.isImgEnabled || false,
     },
   });
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: Record<string, any>) => {
+      console.log(data);
       const response = await axios.put(`/api/user/${user?.id}`, data);
       if (response.status !== 200) {
         throw new Error("Network response was not ok");
@@ -134,6 +137,14 @@ export default function Dashboard() {
             disabled={!enableEdit}
             {...register("difficulty", { required: true })}
             errors={errors.difficulty}
+          />
+
+          <Checkbox
+            label="Enable Word Image"
+            isCheck={user?.isImgEnabled}
+            errors={errors.isImgEnabled}
+            disabled={!enableEdit}
+            {...register("isImgEnabled")}
           />
           {enableEdit && (
             <div className="flex justify-between">
