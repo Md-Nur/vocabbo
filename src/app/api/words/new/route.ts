@@ -28,23 +28,23 @@ export async function POST(req: Request) {
   }
   // more words will be ai generated for now just get other words
   try {
-    const result = await getGroqWords(
+    let result = await getGroqWords(
       number_of_words,
       user.interests,
       user.difficulty,
       learnedWords
     );
 
-    // Validate that we got exactly the requested number of words
-    // if (result.length !== number_of_words) {
-    //   console.error(
-    //     `Expected ${number_of_words} words but got ${result.length}`
-    //   );
-    //   return NextResponse.json(
-    //     { error: `Failed to generate exactly ${number_of_words} words` },
-    //     { status: 500 }
-    //   );
-    // }
+    // Validate that we got at least the requested number of words
+    if (result.length < number_of_words) {
+      const extraResult = await getGroqWords(
+        number_of_words - result.length,
+        user.interests,
+        user.difficulty,
+        learnedWords
+      );
+      result = result.concat(extraResult);
+    }
 
     var newWords = result.map(
       (word: {
@@ -69,7 +69,7 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
-  
+
   try {
     const encoder = new TextEncoder();
     const strem = new ReadableStream({
