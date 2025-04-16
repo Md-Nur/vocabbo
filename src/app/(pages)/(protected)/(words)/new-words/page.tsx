@@ -12,7 +12,7 @@ import { toast } from "sonner";
 
 const NewWords = () => {
   const user = useAppSelector((state) => state.user.user);
-  const [number_of_words, setNumberOfWords] = useState(50);
+  const [number_of_words, setNumberOfWords] = useState(20);
   const [words, setWords] = useState<Word[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();

@@ -6,6 +6,7 @@ export default async function errorHandler(promise: Promise<any>) {
   } catch (error) {
     if (isAxiosError(error)) {
       console.error("Error:", error?.response?.data);
+      console.error("Status Code:", error);
       throw new Error(error?.response?.data?.error);
     }
     console.error("Error:", error);
