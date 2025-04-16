@@ -40,7 +40,6 @@ export default function Dashboard() {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: Record<string, any>) => {
-      console.log(data);
       const response = await axios.put(`/api/user/${user?.id}`, data);
       if (response.status !== 200) {
         throw new Error("Network response was not ok");

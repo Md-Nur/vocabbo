@@ -33,7 +33,6 @@ const Leaderboard = () => {
       </div>
     );
   }
-  console.log(leaderboard);
   return (
     <div className="flex flex-col items-center justify-center max-h-screen my-10">
       <Title>Leaderboard</Title>
