@@ -36,7 +36,7 @@ const Hero = () => {
               Explore new words, test yourself with quizzes, and see how you
               rank against others. Learning has never been this fun!
             </p>
-            {user && (
+            {!user && (
               <>
                 <Link href="/auth/signup/1" className="btn btn-primary mr-3">
                   Join
