@@ -4,13 +4,14 @@ import { useQuery } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import Words from "@/components/Words/Words";
 import Loading from "@/components/Loading";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { use } from "react";
 import Pagination from "@/components/Pagination";
 import { toast } from "sonner";
 
-const Bookmarks = ({ params }) => {
-  const resolvedParams: { page_no: number } = use(params);
+const Bookmarks = () => {
+  const params = useParams();
+  const page_no = Number(params.page_no);
   const user = useAppSelector((state) => state.user.user);
   const router = useRouter();
   const {
@@ -19,10 +20,10 @@ const Bookmarks = ({ params }) => {
     error,
     isError,
   } = useQuery({
-    queryKey: ["bookmarks", resolvedParams.page_no],
+    queryKey: ["bookmarks", page_no],
     queryFn: async () => {
       const response = await axios.get(
-        `/api/user/${user?.id}?page=${resolvedParams.page_no}&bookmark=1`
+        `/api/user/${user?.id}?page=${page_no}&bookmark=1`
       );
       return response.data;
     },
@@ -42,10 +43,10 @@ const Bookmarks = ({ params }) => {
         </div>
       </div>
     );
-  } else if (resolvedParams.page_no > words.totalPages) {
+  } else if (page_no > words.totalPages) {
     toast.error("Page not found");
     router.push(`/my-words/${words.totalPages}`);
-  } else if (resolvedParams.page_no < 1) {
+  } else if (page_no < 1) {
     toast.error("Page not found");
     router.push(`/my-words/1`);
   }
@@ -58,7 +59,7 @@ const Bookmarks = ({ params }) => {
       <Words words={words.words} />
       <Pagination
         totalPages={words.totalPages}
-        pageNo={resolvedParams.page_no}
+        pageNo={page_no}
         path="/my-words"
       />
     </div>

@@ -7,7 +7,7 @@ import axios, { AxiosError, isAxiosError } from "axios";
 import { useParams } from "next/navigation";
 import SingleWord from "@/components/Words/SingleWord";
 
-const OneWord = ({ params }: { params: { id: string } }) => {
+const OneWord = () => {
   const { id } = useParams();
   const { user } = useAppSelector((state) => state.user);
 

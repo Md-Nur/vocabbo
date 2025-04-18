@@ -55,7 +55,7 @@ export async function getGroqWord(
   Follow these rules:
   2. Use the user's interests: ${interests.join(", ")}.
   3. Use the user's difficulty level: ${difficulty}.
-  4. Strictly avoid these words ${learnedWords.join(", ")}.
+  4. Strictly avoid these words:  ${learnedWords.join(", ")}.
   6. There EXACTLY 3 example sentences for each word.
   `;
   console.log(prompt);

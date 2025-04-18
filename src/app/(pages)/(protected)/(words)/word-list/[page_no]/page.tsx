@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import Search from "@/components/Search";
 import Filter from "@/components/Filter";
 
-const AllWords = (props) => {
+const AllWords = () => {
   const params = useParams();
   const page_no = parseInt(params.page_no as string, 10) || 1;
   const searchParams = useSearchParams();
