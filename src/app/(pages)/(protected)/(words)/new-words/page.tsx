@@ -48,6 +48,7 @@ const WordNo = () => {
         return [data];
       });
     } catch (error) {
+      setFetchNumber((prev) => prev - 1);
       console.error("Error fetching new word:", error);
     }
   };
@@ -82,8 +83,7 @@ const WordNo = () => {
   useEffect(() => {
     if (
       loading ||
-      (words &&
-        words?.length > Number(process.env.NEXT_PUBLIC_NUMBER_OF_WORDS))
+      (words && words?.length > Number(process.env.NEXT_PUBLIC_NUMBER_OF_WORDS))
     )
       return;
     else if (
