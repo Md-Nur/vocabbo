@@ -1,6 +1,7 @@
 import { useAppSelector } from "@/store/hooks";
 import Image from "next/image";
 import Link from "next/link";
+import HeroImg from "../../../public/hero.png";
 
 const Hero = () => {
   const { user } = useAppSelector((state) => state.user);
@@ -11,9 +12,8 @@ const Hero = () => {
         <div className="hero-content flex-col lg:flex-row-reverse max-w-6xl mx-auto">
           <Image
             alt="hero"
-            width={1000}
-            height={1000}
-            src="/hero.png"
+            src={HeroImg}
+            placeholder="blur"
             className="max-w-sm w-full"
           />
           <div className="">
@@ -36,7 +36,7 @@ const Hero = () => {
               Explore new words, test yourself with quizzes, and see how you
               rank against others. Learning has never been this fun!
             </p>
-            {!user && (
+            {!user ? (
               <>
                 <Link href="/auth/signup/1" className="btn btn-primary mr-3">
                   Join
@@ -45,6 +45,10 @@ const Hero = () => {
                   Login
                 </Link>
               </>
+            ) : (
+              <Link href="/new-words" className="btn btn-primary">
+                Start Learning
+              </Link>
             )}
           </div>
         </div>

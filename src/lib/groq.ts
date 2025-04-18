@@ -43,6 +43,41 @@ export async function getGroqWords(
     throw new Error("Failed to generate words");
   }
 }
+export async function getGroqWord(
+  interests: string[],
+  difficulty: string,
+  learnedWords: string[]
+) {
+  const prompt = `
+  Generate a word with meaning and examples of sentences based on the user's interests and ${difficulty} level among easy, medium, hard. Also give a prompt for that word that can be generate an image and avoid using words already learned by the user : ${learnedWords.join(
+    ", "
+  )}.
+  Follow these rules:
+  2. Use the user's interests: ${interests.join(", ")}.
+  3. Use the user's difficulty level: ${difficulty}.
+  4. Strictly avoid these words ${learnedWords.join(", ")}.
+  6. There EXACTLY 3 example sentences for each word.
+  `;
+  console.log(prompt);
+  try {
+    const result = await generateObject({
+      model: groq("llama-3.3-70b-versatile"),
+      system: "You are a strict JSON generator.",
+      prompt: prompt,
+      schema: z.object({
+        word: z.string().describe("The word to be learned"),
+        meaning: z.string().describe("The meaning of the word"),
+        exampleSentences: z.array(z.string().describe("Example sentences")),
+        category: z.string().describe("The category of the word"),
+        prompt: z.string().describe("The prompt for generating an image"),
+      }),
+    });
+    return result.object;
+  } catch (error) {
+    console.error("Error generating words:", error);
+    throw new Error("Failed to generate words");
+  }
+}
 export async function getGroqInterests(interestes: string) {
   const result = await generateObject({
     model: groq("llama-3.3-70b-versatile"),

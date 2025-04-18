@@ -2,11 +2,12 @@
 import { useAppSelector } from "@/store/hooks";
 import { useQuery } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
-import Words from "@/components/Words";
+import Words from "@/components/Words/Words";
 import Loading from "@/components/Loading";
 import { useParams, useRouter } from "next/navigation";
 import Pagination from "@/components/Pagination";
 import { toast } from "sonner";
+import ErrorPage from "@/components/ErrorPage";
 
 const MyWords = () => {
   const params = useParams();
@@ -28,18 +29,7 @@ const MyWords = () => {
 
   if (isLoading) return <Loading />;
   else if (isError) {
-    return (
-      <div className="w-full">
-        <h1 className="text-2xl md:text-5xl font-bold text-center my-5 md:my-10">
-          My Words
-        </h1>
-        <div className="text-center text-red-500 my-10 text-2xl">
-          {error instanceof AxiosError && error.response?.data?.error
-            ? error.response.data.error
-            : "Something went wrong"}
-        </div>
-      </div>
-    );
+    return <ErrorPage title="My Words" error={error} />;
   } else if (page_no > words.totalPages) {
     toast.error("Page not found");
     router.push(`/my-words/${words.totalPages}`);

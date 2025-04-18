@@ -160,7 +160,7 @@ const detectLanguage = async (text: string) => {
   );
   return res.data?.lang;
 };
-export const getTranslateWords = async (
+export const getTranslateWords2 = async (
   content: {
     word: string;
     meaning: string;
@@ -203,7 +203,7 @@ export const getTranslateWords = async (
     category: res.data.translated_json.category,
   };
 };
-export const getTranslateWords2 = async (
+export const getTranslateWords = async (
   content: {
     word: string;
     meaning: string;

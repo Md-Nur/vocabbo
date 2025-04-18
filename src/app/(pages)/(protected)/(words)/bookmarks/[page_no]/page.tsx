@@ -2,14 +2,14 @@
 import { useAppSelector } from "@/store/hooks";
 import { useQuery } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
-import Words from "@/components/Words";
+import Words from "@/components/Words/Words";
 import Loading from "@/components/Loading";
 import { useRouter } from "next/navigation";
 import { use } from "react";
 import Pagination from "@/components/Pagination";
 import { toast } from "sonner";
 
-const Bookmarks = ({ params }: { params: Promise<{ page_no: number }> }) => {
+const Bookmarks = ({ params }) => {
   const resolvedParams: { page_no: number } = use(params);
   const user = useAppSelector((state) => state.user.user);
   const router = useRouter();

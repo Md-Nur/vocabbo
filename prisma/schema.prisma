@@ -29,6 +29,7 @@ model User {
   QuizAttempt      QuizAttempt[]
   QuizResult       QuizResult[]
   TranslateWord    TranslateWord[]
+  EnglishWord      EnglishWord[]
 
   @@map("users")
 }
@@ -50,6 +51,7 @@ model Word {
   addedBy       User            @relation("AddedWords", fields: [addedById], references: [id])
   interactions  UserWord[]
   translateWord TranslateWord[]
+  englishWord   EnglishWord?
 
   @@map("words")
 }
@@ -62,8 +64,9 @@ model UserWord {
   lastReviewed DateTime? @default(now()) @map("last_reviewed")
 
   // Relationships
-  user User @relation(fields: [userId], references: [id])
-  word Word @relation(fields: [wordId], references: [id])
+  user        User         @relation(fields: [userId], references: [id])
+  word        Word         @relation(fields: [wordId], references: [id])
+  EnglishWord EnglishWord?
 
   @@unique([userId, wordId])
   @@map("user_words")
@@ -82,6 +85,22 @@ model TranslateWord {
   userId                     String
   user                       User     @relation(fields: [userId], references: [id])
   createdAt                  DateTime @default(now())
+}
+
+model EnglishWord {
+  id                      String   @id @default(uuid())
+  wordId                  String   @unique
+  word                    Word     @relation(fields: [wordId], references: [id])
+  wordLanguage            Language
+  englishWord             String
+  englishMeaning          String
+  englishExampleSentences String[]
+  englishCategory         String?
+  userId                  String
+  user                    User     @relation(fields: [userId], references: [id])
+  userWordId              String   @unique
+  userWord                UserWord @relation(fields: [userWordId], references: [id])
+  createdAt               DateTime @default(now())
 }
 
 model Quiz {
@@ -128,7 +147,7 @@ model QuizResult {
   id         String       @id @default(uuid())
   attemptId  String
   attempt    QuizAttempt  @relation(fields: [attemptId], references: [id])
-  questionId String       
+  questionId String
   question   QuizQuestion @relation(fields: [questionId], references: [id])
   userId     String
   user       User         @relation(fields: [userId], references: [id])

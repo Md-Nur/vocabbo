@@ -2,7 +2,7 @@
 import { useAppSelector } from "@/store/hooks";
 import { useQuery } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
-import Words from "@/components/Words";
+import Words from "@/components/Words/Words";
 import Loading from "@/components/Loading";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Pagination from "@/components/Pagination";
@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import Search from "@/components/Search";
 import Filter from "@/components/Filter";
 
-const AllWords = () => {
+const AllWords = (props) => {
   const params = useParams();
   const page_no = parseInt(params.page_no as string, 10) || 1;
   const searchParams = useSearchParams();

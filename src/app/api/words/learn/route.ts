@@ -15,13 +15,14 @@ export async function POST(req: Request) {
     where: {
       userId: user.id,
     },
-    select: {
+    include: {
+      EnglishWord: true,
       word: true,
-      lastReviewed: true,
     },
     orderBy: {
       lastReviewed: "desc",
     },
+
     take: number_of_words * 3,
   });
 
@@ -30,9 +31,17 @@ export async function POST(req: Request) {
   }
   // console.log(new Date().getTime() - new Date(learnedWords[0].lastReviewed!).getTime())
   const isAvailable =
-    new Date().getTime() - new Date(learnedWords[0].lastReviewed!).getTime() >
+    new Date().getTime() -
+      new Date(learnedWords[number_of_words - 1].lastReviewed!).getTime() >
     1000 * 60 * 60 * 24;
 
-  const words: string[] = learnedWords.map(({ word }) => word.word);
+  const words: string[] = learnedWords.map((word) => {
+    if (word.EnglishWord) {
+      return word.EnglishWord.englishWord;
+    } else if (word.word) {
+      return word.word.word;
+    }
+    return "";
+  });
   return NextResponse.json({ words, isAvailable }, { status: 200 });
 }

@@ -1,31 +1,22 @@
 "use client";
-import Loading from "@/components/Loading";
 import { useAppSelector } from "@/store/hooks";
-import { useQuery } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
+import { EnglishWord, TranslateWord, UserWord, Word } from "@prisma/client";
+import { useMutation } from "@tanstack/react-query";
+import axios, { isAxiosError } from "axios";
 import Image from "next/image";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { IoBookmarkSharp } from "react-icons/io5";
 import { toast } from "sonner";
+import Title from "../Title";
 
-const SingleWord = ({ params }: { params: Promise<{ id: string }> }) => {
-  const { id } = use(params);
+export interface detailsWord extends Word {
+  interactions: UserWord[];
+  translateWord: TranslateWord[];
+  englishWord: EnglishWord;
+}
+
+const SingleWord = ({ word, title }: { word: detailsWord; title?: string }) => {
   const { user } = useAppSelector((state) => state.user);
-
-  const {
-    data: word,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ["single-word", id],
-    queryFn: async () => {
-      const res = await axios.post(`/api/words/word/${id}`, user);
-      return res.data;
-    },
-  });
-
-  
   const [isBookmarked, setIsBookmarked] = useState<Boolean>(
     word?.interactions.length ? word?.interactions[0]?.isBookmarked : false
   );
@@ -35,32 +26,33 @@ const SingleWord = ({ params }: { params: Promise<{ id: string }> }) => {
     );
   }, [word]);
 
-  if (isLoading) return <Loading />;
-  else if (isError) {
-    console.error(error);
-    return (
-      <div className="text-error text-center text-3xl my-10">
-        {error instanceof AxiosError && error?.response?.data?.error
-          ? error.response.data.error
-          : "Something went wrong"}
-      </div>
-    );
-  }
+  const { mutate: handleBookmark } = useMutation({
+    mutationKey: ["bookmark-word", word.id],
+    mutationFn: async () => {
+      if (!user?.id) {
+        toast.error("Please login to bookmark a word");
+        return;
+      }
+      setIsBookmarked(!isBookmarked);
+      const res = await axios.put(`/api/words/word/${word.id}/bookmark`, {
+        userId: user?.id,
+        isBookmarked: !isBookmarked,
+      });
+      setIsBookmarked(res.data.isBookmarked);
+    },
+    onError: (error) => {
+      console.error(error);
+      toast.error(
+        isAxiosError(error)
+          ? error?.response?.data?.error
+          : "Something went wrong"
+      );
+    },
+  });
 
-  const handleBookmark = async () => {
-    if (!user?.id) {
-      toast.error("Please login to bookmark a word");
-      return;
-    }
-    setIsBookmarked(!isBookmarked);
-    const res = await axios.put(`/api/words/word/${id}/bookmark`, {
-      userId: user?.id,
-      isBookmarked: !isBookmarked,
-    });
-    setIsBookmarked(res.data.isBookmarked);
-  };
   return (
-    <div className="hero my-20 w-full">
+    <div className="my-10 w-full">
+      <Title>{title}</Title>
       <div className="hero-content flex-col lg:flex-row">
         {word.imageUrl && (
           <Image
@@ -69,6 +61,8 @@ const SingleWord = ({ params }: { params: Promise<{ id: string }> }) => {
             src={word.imageUrl}
             alt={word.word}
             className="max-w-sm rounded-lg shadow-2xl"
+            placeholder="blur"
+            blurDataURL="/blurImg.png"
           />
         )}
         <div>
@@ -85,7 +79,7 @@ const SingleWord = ({ params }: { params: Promise<{ id: string }> }) => {
                 className={`text-2xl cursor-pointer ${
                   isBookmarked ? "text-info" : "text-base-content"
                 }`}
-                onClick={handleBookmark}
+                onClick={() => handleBookmark()}
               />
               <div className="tooltip-content">
                 <div className="animate-bounce">
