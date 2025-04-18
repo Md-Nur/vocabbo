@@ -30,9 +30,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ words: [], isAvailable: true }, { status: 200 });
   }
   // console.log(new Date().getTime() - new Date(learnedWords[0].lastReviewed!).getTime())
+  const smallIndex =
+    number_of_words < learnedWords.length
+      ? number_of_words
+      : learnedWords.length;
+      
   const isAvailable =
     new Date().getTime() -
-      new Date(learnedWords[number_of_words - 1].lastReviewed!).getTime() >
+      new Date(learnedWords[smallIndex - 1].lastReviewed!).getTime() >
     1000 * 60 * 60 * 24;
 
   const words: string[] = learnedWords.map((word) => {
