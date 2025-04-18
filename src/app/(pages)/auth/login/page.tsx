@@ -13,6 +13,7 @@ import Input from "@/components/FormUI/input";
 import { getPreviousRoute } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
+import loginImg from "../../../../../public/login.png";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -61,15 +62,16 @@ export default function LoginPage() {
 
   return (
     <div className="w-full h-full">
-      <h1 className="text-3xl md:text-5xl font-bold text-center my-10">Login</h1>
+      <h1 className="text-3xl md:text-5xl font-bold text-center my-10">
+        Login
+      </h1>
       <div className="hero-content flex-col lg:flex-row mx-auto">
         <div className="text-center lg:text-left md:min-w-96 min-w-72">
           <Image
-            src="/login.png"
             alt="login"
-            width={500}
-            height={500}
+            src={loginImg}
             className="w-full h-full object-cover max-w-96"
+            placeholder="blur"
           />
           <p className="py-6">Please enter your email and password to login.</p>
         </div>
