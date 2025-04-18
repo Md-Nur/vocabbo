@@ -1,9 +1,7 @@
 "use client";
 import ErrorPage from "@/components/ErrorPage";
 import Loading from "@/components/Loading";
-import Title from "@/components/Title";
 import SingleWord, { detailsWord } from "@/components/Words/SingleWord";
-import errorHandler from "@/lib/errorHandler";
 import { getPreviousRoute } from "@/lib/utils";
 import { useAppSelector } from "@/store/hooks";
 import axios, { AxiosError } from "axios";
@@ -65,8 +63,8 @@ const WordNo = () => {
         if (res.data.isAvailable) {
           setLearnedWords(res.data.words);
         } else {
+          router.push("/my-words/1");
           toast.error("No more words available");
-          router.push(getPreviousRoute());
         }
       } catch (error) {
         setError(error as AxiosError);
