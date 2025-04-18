@@ -3,7 +3,6 @@ import errorHandler from "./errorHandler";
 import { generateObject } from "ai";
 import { groq } from "@ai-sdk/groq";
 import { z } from "zod";
-import { openai } from "@ai-sdk/openai";
 
 const headers = {
   "x-rapidapi-key": process.env.RAPID_API_KEY,
@@ -239,7 +238,7 @@ JSON Schema:
   "category": "string"
 }`;
   const result = await generateObject({
-    model: openai("gpt-4"),
+    model: groq("gemma2-9b-it"),
     system: "You are a strict JSON generator that translate text.",
     prompt: prompt,
     schema: z.object({
