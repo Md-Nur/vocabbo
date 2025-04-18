@@ -3,6 +3,7 @@ import errorHandler from "./errorHandler";
 import { generateObject } from "ai";
 import { groq } from "@ai-sdk/groq";
 import { z } from "zod";
+import { openai } from "@ai-sdk/openai";
 
 const headers = {
   "x-rapidapi-key": process.env.RAPID_API_KEY,
@@ -214,7 +215,6 @@ export const getTranslateWords = async (
   originLanguage: string = "English"
 ) => {
   const prompt = `You are a multilingual assistant. Your task is to translate specific English text fragments into a given target language and output ONLY the translations in the following JSON format.
-
 Target Language
 ${targetLanguage}
 
@@ -233,19 +233,34 @@ JSON Schema:
 {
   "word": "string",
   "meaning": "string",
-  "exampleSentences": ["string", "string", "string"],
+  "e0": "string",
+  "e1": "string",
+  "e2": "string",
   "category": "string"
 }`;
   const result = await generateObject({
-    model: groq("gemma2-9b-it"),
+    model: openai("gpt-4"),
     system: "You are a strict JSON generator that translate text.",
     prompt: prompt,
     schema: z.object({
-      word: z.string().describe("Word"),
-      meaning: z.string().describe("Meaning"),
-      exampleSentences: z.array(z.string().describe("Example Sentences")),
-      category: z.string().describe("Category"),
+      word: z.string().describe(`${content.word} to ${targetLanguage}`),
+      meaning: z.string().describe(`${content.meaning} to ${targetLanguage}`),
+      e0: z
+        .string()
+        .describe(`${content.exampleSentences[0]} to ${targetLanguage}`),
+      e1: z
+        .string()
+        .describe(`${content.exampleSentences[1]} to ${targetLanguage}`),
+      e2: z
+        .string()
+        .describe(`${content.exampleSentences[2]} to ${targetLanguage}`),
+      category: z.string().describe(`${content.category} to ${targetLanguage}`),
     }),
   });
-  return result.object;
+  return {
+    word: result.object.word,
+    meaning: result.object.meaning,
+    exampleSentences: [result.object.e0, result.object.e1, result.object.e2],
+    category: result.object.category,
+  };
 };

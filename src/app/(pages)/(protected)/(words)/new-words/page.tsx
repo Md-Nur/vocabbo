@@ -1,10 +1,12 @@
 "use client";
+import ErrorPage from "@/components/ErrorPage";
 import Loading from "@/components/Loading";
 import Title from "@/components/Title";
 import SingleWord, { detailsWord } from "@/components/Words/SingleWord";
+import errorHandler from "@/lib/errorHandler";
 import { getPreviousRoute } from "@/lib/utils";
 import { useAppSelector } from "@/store/hooks";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -12,46 +14,68 @@ import { toast } from "sonner";
 const WordNo = () => {
   const [word_no, setWordNo] = useState<number>(1);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<AxiosError | null>(null);
   const router = useRouter();
   const [words, setWords] = useState<detailsWord[] | null>(null);
   const [learnedWords, setLearnedWords] = useState<string[] | null>(null);
+  const [fetchNumber, setFetchNumber] = useState<number>(0);
   const { user } = useAppSelector((state) => state.user);
 
   const fetchNewWord = async () => {
     if (!learnedWords || !user) {
       return;
     }
-    const { data } = await axios.post("/api/words/single-new", {
-      user,
-      learnedWords,
-    });
-    setLearnedWords((prev) => {
-      if (prev) {
-        return [data.englishWord.englishWord, ...prev];
-      }
-      return [data.englishWord.englishWord];
-    });
-    setWords((prev) => {
-      if (prev) {
-        return [...prev, data];
-      }
-      return [data];
-    });
+    setFetchNumber((prev) => prev + 1);
+    if (fetchNumber >= Number(process.env.NEXT_PUBLIC_NUMBER_OF_WORDS)) {
+      return;
+    }
+    try {
+      const { data } = await axios.post("/api/words/single-new", {
+        user,
+        learnedWords,
+      });
+
+      setLearnedWords((prev) => {
+        if (prev) {
+          return [data.englishWord.englishWord, ...prev];
+        }
+        return [data.englishWord.englishWord];
+      });
+      setWords((prev) => {
+        if (prev) {
+          return [...prev, data];
+        }
+        return [data];
+      });
+    } catch (error) {
+      console.error("Error fetching new word:", error);
+    }
   };
 
   useEffect(() => {
     const fetchLearnWords = async () => {
       setLoading(true);
-      console.log(learnedWords);
-      const res = await axios.post("/api/words/learn", {
-        user,
-        number_of_words: process.env.NEXT_PUBLIC_NUMBER_OF_WORDS || 10,
-      });
-      setLearnedWords(res.data.words);
-      setLoading(false);
-      console.log(learnedWords);
+
+      try {
+        const res = await axios.post("/api/words/learn", {
+          user,
+          number_of_words: process.env.NEXT_PUBLIC_NUMBER_OF_WORDS || 10,
+        });
+        if (res.data.isAvailable) {
+          setLearnedWords(res.data.words);
+        } else {
+          toast.error("No more words available");
+          router.push(getPreviousRoute());
+        }
+      } catch (error) {
+        setError(error as AxiosError);
+        toast.error("Error fetching words");
+        console.error("Error fetching words:", error);
+      } finally {
+        setLoading(false);
+      }
     };
+
     fetchLearnWords();
   }, [user]);
 
@@ -59,16 +83,21 @@ const WordNo = () => {
     if (
       loading ||
       (words &&
-        words?.length >= Number(process.env.NEXT_PUBLIC_NUMBER_OF_WORDS))
+        words?.length > Number(process.env.NEXT_PUBLIC_NUMBER_OF_WORDS))
     )
       return;
-    if (
+    else if (
       word_no < 1 ||
       word_no > Number(process.env.NEXT_PUBLIC_NUMBER_OF_WORDS)
     ) {
       toast.error("Invalid Word Number");
       router.push(getPreviousRoute());
-    } else if (!words || words.length - 2 < word_no) {
+    } else if (
+      (words &&
+        fetchNumber < Number(process.env.NEXT_PUBLIC_NUMBER_OF_WORDS) &&
+        fetchNumber - 3 < word_no) ||
+      !words
+    ) {
       fetchNewWord();
     }
   }, [word_no, learnedWords]);
@@ -77,7 +106,9 @@ const WordNo = () => {
     return <Loading />;
   }
 
-  if (words.length <= word_no) {
+  if (error) return <ErrorPage title="New Words" error={error} />;
+
+  if (words.length < word_no) {
     return <Loading />;
   }
   if (!words[word_no - 1] || !words[word_no - 1].word) {

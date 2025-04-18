@@ -1,4 +1,5 @@
 import { groq } from "@ai-sdk/groq";
+import { openai } from "@ai-sdk/openai";
 import { generateObject } from "ai";
 import { z } from "zod";
 
@@ -22,7 +23,7 @@ export async function getGroqWords(
       `;
   try {
     const result = await generateObject({
-      model: groq("llama-3.3-70b-versatile"),
+      model: openai("gpt-4"),
       system: "You are a strict JSON generator.",
       prompt: prompt,
       schema: z.object({
@@ -58,10 +59,10 @@ export async function getGroqWord(
   4. Strictly avoid these words:  ${learnedWords.join(", ")}.
   6. There EXACTLY 3 example sentences for each word.
   `;
-  console.log(prompt);
+  // console.log(prompt);
   try {
     const result = await generateObject({
-      model: groq("llama-3.3-70b-versatile"),
+      model: groq("deepseek-r1-distill-llama-70b"),
       system: "You are a strict JSON generator.",
       prompt: prompt,
       schema: z.object({
@@ -80,7 +81,7 @@ export async function getGroqWord(
 }
 export async function getGroqInterests(interestes: string) {
   const result = await generateObject({
-    model: groq("llama-3.3-70b-versatile"),
+    model: groq("gemma2-9b-it"),
     system: "You are a strict JSON generator.",
     prompt: `Extract interests from the user's input. The user is interested in ${interestes}.`,
     schema: z.object({
